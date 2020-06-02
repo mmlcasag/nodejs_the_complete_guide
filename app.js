@@ -16,9 +16,31 @@ const server = http.createServer((req, res) => {
     }
     
     if (url === '/message' && method === 'POST') {
-        const message = 'DUMMY TEXT';
-        // I want to store the message in a text file
-        fs.writeFileSync('message.txt', message);
+        // how to get our request data
+        const body = [];
+        
+        // this adds chunks of data to the body array
+        // this is one event listener
+        req.on('data', (chunk) => { 
+            console.log(chunk);
+            body.push(chunk);
+        });
+
+        // after all the chunks have been pushed into the body array
+        // this is another event listener
+        req.on('end', () => {
+            const parsedBody = Buffer.concat(body).toString();
+            console.log(parsedBody);
+
+            // now if we break the parsedBody
+            // message=message
+            // we can store the value in our text file
+            const message = parsedBody.split('=')[1];
+            
+            // I want to store the message in a text file
+            fs.writeFileSync('message.txt', message);
+        });
+        
         // And redirect the user back to '/'
         res.statusCode = 302;
         res.setHeader('Location', '/');
