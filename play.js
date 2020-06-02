@@ -149,7 +149,7 @@ console.log(hobbies);
 */
 
 // Spread and Rest Operators
-
+/*
 // Spread Operator
 
 // copy an array
@@ -201,3 +201,58 @@ const toArrayRestOperatorRefactores = (...args) => args;
 
 console.log(toArrayRestOperator(1,2,3,4,5));
 console.log(toArrayRestOperatorRefactores(1,2,3,4,5));
+*/
+
+// Destructuring
+
+// consider this object
+const person = {
+    name: 'Marcio',
+    age: 29,
+    greet() {
+        console.log('Name: ' + this.name + " Age: " + this.age);
+    }
+}
+
+
+
+// now consider this function
+const printName = (person) => {
+    console.log(person.name);
+}
+
+// now i am executting that function
+printName(person);
+
+// can you see that i am sending the whole object into the function to work just with the name?
+
+// let's create this other object
+const car = {
+    name: 'Xsara Picasso',
+    year: 2008,
+    make: 'Citroen'
+}
+
+// you might feel confused if you can pass a car to a function used for persons, right?
+printName(car);
+
+// what if your function specified only the information it really needs?
+
+const justNameIWant = ({ name }) => {
+    console.log(name);
+}
+
+// now it seems clearer: I can pass whatever object that has a name attribute
+// and it will work just fine!
+
+justNameIWant(car);
+justNameIWant(person);
+
+// you can also do that
+
+const { make, name } = car;
+console.log(make, name);
+
+const hobbies = ['Sports', 'Cooking', 'Drinking'];
+const [hobby1, hobby2] = hobbies;
+console.log(hobby1, hobby2);
