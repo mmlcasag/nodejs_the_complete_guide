@@ -54,3 +54,7 @@ const server = http.createServer((req, res) => {
 server.listen(3000);
 
 // we will use this third approach during this course
+
+// Want to quit your running Node.js server?
+// You can always do that by pressing CTRL + C in the terminal/ command prompt window 
+// where you started your server (i.e. where you ran node app.js).
