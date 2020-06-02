@@ -6,8 +6,6 @@ var hasHobbies = true;
 function summarizeUser(userName, userAge, userHasHobbies) {
     return ("Name: " + userName + " Age: " + userAge + " Has Hobbies: " + userHasHobbies);
 }
-
-console.log(summarizeUser(name, age, hasHobbies));
 */
 
 // LET AND CONST
@@ -17,3 +15,49 @@ let age = 29 // variables that may change
 let hasHobbies = true; // same thing as above
 
 // name = "Marcio"; // this raises an error because it is a constant;
+
+// ARROW FUNCTIONS
+// Beginner
+/*
+const summarizeUser = function (userName, userAge, userHasHobbies) {
+    return ("Name: " + userName + " Age: " + userAge + " Has Hobbies: " + userHasHobbies);
+}
+*/
+// Intermediate
+const summarizeUser = (userName, userAge, userHasHobbies) => {
+    // Advantages of using array functions:
+    // 1) It's shorter
+    // 2) Enables to use the "this" keyword
+    return ("Name: " + userName + " Age: " + userAge + " Has Hobbies: " + userHasHobbies);
+}
+// Advanced
+// Arrow functions with 2 or more arguments
+var add = (a, b) => {
+    return a + b;
+}
+// If you have an arrow function with one statement which happens to be the return statement
+// you can refactor to this:
+var add = (a, b) => a + b;
+// this is exactly the same as the function before
+
+// Arrow functions with one argument
+// now let's consider another example
+var addOne = (a) => {
+    return a + 1;
+}
+// you can refactor to this:
+var addOne = (a) => a + 1;
+// and also to this:
+var addOne = a => a + 1;
+
+// Arrow functions with no arguments
+var addRandom = () => {
+    return 1 + 8;
+}
+// you can refactor to this:
+var addRandom = () => 1 + 8;
+
+console.log(summarizeUser(name, age, hasHobbies));
+console.log(add(1,2));
+console.log(addOne(3));
+console.log(addRandom());
