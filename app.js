@@ -38,12 +38,18 @@ const server = http.createServer((req, res) => {
             const message = parsedBody.split('=')[1];
 
             // I want to store the message in a text file
-            fs.writeFileSync('message.txt', message);
             
-            // And redirect the user back to '/'
-            res.statusCode = 302;
-            res.setHeader('Location', '/');
-            return res.end();
+            // this is synchronous code
+            // fs.writeFileSync('message.txt', message);
+            // this will block the code until this command is executed
+            
+            // another way of doing this is with asynchronous code, like this
+            fs.writeFile('message.txt', message, err => {
+                // And redirect the user back to '/'
+                res.statusCode = 302;
+                res.setHeader('Location', '/');
+                return res.end();
+            });
         });
     }
 
