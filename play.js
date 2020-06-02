@@ -69,6 +69,7 @@ console.log(addRandom());
 
 // Objects
 // this will not work
+/*
 var person = {
     name: "Marcio",
     age: 31,
@@ -94,3 +95,41 @@ var person = {
 
 person.greet();
 // this will console log correctly: Name: Marcio Age: 31
+*/
+
+// Arrays & Array Methods
+
+// declaring an empty array
+const hobby = [];
+// declaring an array with elements of different types
+const poutpourri = ['A', 'B', true, 1, { name: 'Márcio', age: 31 }];
+// declaring an array with elements of the same type
+const hobbies = ['Sports', 'Cooking'];
+
+// how to loop through an array
+
+// the "old" way
+for (let hobby of hobbies) {
+    console.log(hobby);
+}
+
+// the "new" way
+hobbies.forEach(hobby => {
+    console.log(hobby);
+});
+
+// other handy functions:
+
+// used to manipulate each element of that array
+// and return the result as a new array
+const newHobbies = hobbies.map(hobby => {
+    return 'Hobby: ' + hobby;
+});
+
+// remember:
+// the function above can be refactored to this:
+const newerHobbies = hobbies.map(hobby => 'Hobby: ' + hobby);
+
+console.log(newerHobbies);
+console.log(newHobbies);
+console.log(hobbies);
