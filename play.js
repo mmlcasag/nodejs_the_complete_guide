@@ -204,7 +204,7 @@ console.log(toArrayRestOperatorRefactores(1,2,3,4,5));
 */
 
 // Destructuring
-
+/*
 // consider this object
 const person = {
     name: 'Marcio',
@@ -213,8 +213,6 @@ const person = {
         console.log('Name: ' + this.name + " Age: " + this.age);
     }
 }
-
-
 
 // now consider this function
 const printName = (person) => {
@@ -256,3 +254,71 @@ console.log(make, name);
 const hobbies = ['Sports', 'Cooking', 'Drinking'];
 const [hobby1, hobby2] = hobbies;
 console.log(hobby1, hobby2);
+*/
+
+// Asynchronous Code
+
+setTimeout(() => {
+    console.log('Timer is done!');
+}, 2000);
+
+// this is not synchronous code
+// it waits 2 seconds, then executes console.log
+
+// this is synchronous code
+console.log('Hello');
+console.log('Hi!');
+
+// if you run this code, console.log will log first "Hello" and "Hi", before the "Timer is done!".
+// javascript does not block your code
+// javascript will recognize that setTimeout has a callback (array function passed as an argument of the setTimeout function)
+// will execute setTimeout and move on to the rest of the script, but eventually will come back to the callback
+// the event loop manages that
+
+// there are many ways to handle async code
+// the callback is the oldest of them
+// for example:
+
+const fetchData = (callback) => {
+    setTimeout(() => {
+        callback('I have finished fetching the data');
+    }, 1500);
+}
+
+console.log('Wait 2 seconds, please');
+
+setTimeout(() => {
+    console.log('Ok, I will fetch the data now');
+    fetchData(message => {
+        console.log(message);
+    });
+}, 2000);
+
+// this might be a bit tricky to read
+// so you can refactor your code as promises:
+
+const fetchData = () => {
+    const promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve('I have finished fetching the data');
+        }, 1500);
+    });
+    return promise;
+}
+
+console.log('Wait 2 seconds, please');
+
+setTimeout(() => {
+    console.log('Ok, I will fetch the data now');
+    
+    fetchData()
+    .then(message => {
+        console.log(message);
+        return fetchData();
+    })
+    .then(message2 => {
+        console.log(message2);
+    });
+}, 2000);
+
+// this is more readable, right?
