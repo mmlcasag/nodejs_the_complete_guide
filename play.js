@@ -98,7 +98,7 @@ person.greet();
 */
 
 // Arrays & Array Methods
-
+/*
 // declaring an empty array
 const hobby = [];
 // declaring an array with elements of different types
@@ -133,3 +133,17 @@ const newerHobbies = hobbies.map(hobby => 'Hobby: ' + hobby);
 console.log(newerHobbies);
 console.log(newHobbies);
 console.log(hobbies);
+*/
+
+// Objects and Arrays are so-called "Reference Types"
+
+// if hobbies is a const, why can I push new elements inside the array?
+const hobbies = ['Sports', 'Cooking'];
+hobbies.push('Drawing');
+console.log(hobbies);
+// turns out we are not storing the values inside the hobbies
+// we are storing only a pointer which points to the memory address in which the array is stored
+// so even though we are adding another element, the pointer is still the same
+// this means that arrays are reference types
+// everything is reference types, except numbers, strings, and booleans, basically
+
