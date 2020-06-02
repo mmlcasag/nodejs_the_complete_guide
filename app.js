@@ -1,28 +1,24 @@
 const http = require('http');
 
 const server = http.createServer((req, res) => {
-    // what really matters is this:
-    console.log('URL: ' + req.url);
-    console.log('Method: ' + req.method);
-    console.log('Headers: ' + req.headers);
+    const url = req.url;
     
-    // if you see object Object it is because it's concatenated with other stuff
-    // log it separately to see its contents
-    console.log(req.headers);
-
-    // how to send responses
-
-    // set the header
+    if (url === '/') {
+        res.setHeader('Content-Type', 'text/html');
+        res.write('<html>');
+        res.write('<head><title>Hello from the server!</title></head>');
+        res.write('<body><form action="/message" method="post"><input type="text" name="message"><button type="submit">Send</button></form></body>');
+        res.write('</html>');
+        // we must do this in order not to execute the outer lines
+        return res.end();
+    }
+    
     res.setHeader('Content-Type', 'text/html');
-    // write the message
     res.write('<html>');
-    res.write('<head><title>Hello from the server!</title></head>');
-    res.write('<body><h1>Hello from the server!</h1></body>');
+    res.write('<head><title>My First Page!</title></head>');
+    res.write('<body><h1>Hello from the Node.js Server!</h1></body>');
     res.write('</html>');
-    // tell the server this is it
-    res.end();
-    // be careful to not send any other response to the server after res.end()
-    // otherwise this will raise an error!
+    return res.end();
 });
 
 server.listen(3000);
