@@ -45,16 +45,26 @@ server.listen(3000);
 const http = require('http');
 
 const server = http.createServer((req, res) => {
-    console.log(req);
+    // logs the whole request
+    // with all its irrelevant attributes
+    // console.log(req);
+    // what really matters is this:
+    console.log('URL: ' + req.url);
+    console.log('Method: ' + req.method);
+    console.log('Headers: ' + req.headers);
+    
+    // if you see object Object it is because it's concatenated with other stuff
+    // log it separately to see its contents
+    console.log(req.headers);
 
     // this breaks the event loop
-    process.exit();
+    // process.exit();
+
+    // Want to quit your running Node.js server?
+    // You can always do that by pressing CTRL + C in the terminal/ command prompt window 
+    // where you started your server (i.e. where you ran node app.js).
 });
 
 server.listen(3000);
 
 // we will use this third approach during this course
-
-// Want to quit your running Node.js server?
-// You can always do that by pressing CTRL + C in the terminal/ command prompt window 
-// where you started your server (i.e. where you ran node app.js).
