@@ -28,7 +28,7 @@ const server = http.createServer((req, res) => {
 
         // after all the chunks have been pushed into the body array
         // this is another event listener
-        req.on('end', () => {
+        return req.on('end', () => {
             const parsedBody = Buffer.concat(body).toString();
             console.log(parsedBody);
 
@@ -36,15 +36,15 @@ const server = http.createServer((req, res) => {
             // message=message
             // we can store the value in our text file
             const message = parsedBody.split('=')[1];
-            
+
             // I want to store the message in a text file
             fs.writeFileSync('message.txt', message);
+            
+            // And redirect the user back to '/'
+            res.statusCode = 302;
+            res.setHeader('Location', '/');
+            return res.end();
         });
-        
-        // And redirect the user back to '/'
-        res.statusCode = 302;
-        res.setHeader('Location', '/');
-        return res.end();
     }
 
     res.setHeader('Content-Type', 'text/html');
