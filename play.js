@@ -10,10 +10,11 @@ function summarizeUser(userName, userAge, userHasHobbies) {
 
 // LET AND CONST
 // var is outdated, now you should use let or const
+/*
 const name = "Max"; // variables that must not change --> constants
 let age = 29 // variables that may change
 let hasHobbies = true; // same thing as above
-
+*/
 // name = "Marcio"; // this raises an error because it is a constant;
 
 // ARROW FUNCTIONS
@@ -24,13 +25,16 @@ const summarizeUser = function (userName, userAge, userHasHobbies) {
 }
 */
 // Intermediate
+/*
 const summarizeUser = (userName, userAge, userHasHobbies) => {
     // Advantages of using array functions:
     // 1) It's shorter
     // 2) Enables to use the "this" keyword
     return ("Name: " + userName + " Age: " + userAge + " Has Hobbies: " + userHasHobbies);
 }
+*/
 // Advanced
+/*
 // Arrow functions with 2 or more arguments
 var add = (a, b) => {
     return a + b;
@@ -61,3 +65,32 @@ console.log(summarizeUser(name, age, hasHobbies));
 console.log(add(1,2));
 console.log(addOne(3));
 console.log(addRandom());
+*/
+
+// Objects
+// this will not work
+var person = {
+    name: "Marcio",
+    age: 31,
+    greet: () => { // as an array function
+        console.log('Name: ' + this.name + ' Age: ' + this.age);
+    }
+};
+
+person.greet();
+// this will console log: Name: undefined Age: undefined
+// why?
+// when using arrow functions, this is only available inside the scope of the function.
+// name and age are outside the scope of the function
+
+// this will work, though
+var person = {
+    name: "Marcio",
+    age: 31,
+    greet() {
+        console.log('Name: ' + this.name + ' Age: ' + this.age);
+    }
+};
+
+person.greet();
+// this will console log correctly: Name: Marcio Age: 31
