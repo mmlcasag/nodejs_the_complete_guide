@@ -191,3 +191,12 @@ Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the cli
 
 // Want to dive super-deep into the latest debugging capabilities Visual Studio Code gives you (for Node.js apps)?
 // This article will be very helpful: https://code.visualstudio.com/docs/nodejs/nodejs-debugging
+
+//////////////////////////////////////////////////////////////////
+
+// You can manually alter variable values during debugging
+// and with that alter the code flow
+// for example, something which would probably evaluate as true in an if statement
+// you can change to evaluate as false and therefore go to the else clause
+// to test the else clause
+// this is a very effective and a very time-efficient way to debug your code!
