@@ -1,4 +1,4 @@
-const http = require('http');
+cons http = require('http');
 
 const routes = require('./routes');
 
@@ -90,3 +90,27 @@ server.listen(3000);
 // Syntax Errors: Typo, you forgot a closing bracket or something like that
 // Runtime Errors: When you compile, it works perfectly, but when it's running, it crashes
 // Logical Errors: Everything works fine, but the program doesn't do what is supposed to do
+
+//////////////////////////////////////////////////////////
+
+// Syntax Error Example:
+// I'm removing the "t" in const on line 1 of this page
+// Check out the error when trying to run the code:
+
+/*
+cons http = require('http');
+     ^^^^
+
+SyntaxError: Unexpected identifier
+    at wrapSafe (internal/modules/cjs/loader.js:1047:16)
+    at Module._compile (internal/modules/cjs/loader.js:1097:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1153:10)
+    at Module.load (internal/modules/cjs/loader.js:977:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:877:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:74:12)
+    at internal/main/run_main_module.js:18:47
+[nodemon] app crashed - waiting for file changes before starting...
+*/
+
+// This is the easiest because it gives you hints to where the problem is
+// It doesn't alway give you the correct line, but points you about the right direction
