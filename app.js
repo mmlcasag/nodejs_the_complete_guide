@@ -82,3 +82,11 @@ server.listen(3000);
 // just run it locally): npm install -g nodemon would do the trick. Specifically the -g flag ensures 
 // that the package gets added as a global package which you now can use anywhere on your machine, 
 // directly from inside the terminal or command prompt.
+
+//////////////////////////////////////////////////////////
+
+// Types of Errors
+
+// Syntax Errors: Typo, you forgot a closing bracket or something like that
+// Runtime Errors: When you compile, it works perfectly, but when it's running, it crashes
+// Logical Errors: Everything works fine, but the program doesn't do what is supposed to do
