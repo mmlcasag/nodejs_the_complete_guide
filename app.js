@@ -184,3 +184,10 @@ Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the cli
 // This will create the folder .vscode and file launch.json to your file
 // track the changes there
 // for this you have to have nodemon installed globally
+
+//////////////////////////////////////////////////////////////////
+
+// Debugging Node.js in Visual Studio Code
+
+// Want to dive super-deep into the latest debugging capabilities Visual Studio Code gives you (for Node.js apps)?
+// This article will be very helpful: https://code.visualstudio.com/docs/nodejs/nodejs-debugging
