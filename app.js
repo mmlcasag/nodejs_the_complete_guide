@@ -178,3 +178,9 @@ Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the cli
 // 4) Go to your application and navigate until you execute the code you placed the breakpoint
 // 5) The execution will stop and the debugger will pop up
 // 6) Now you can watch variables, step line by line on your code etc.
+
+// To make the debugger restarts every time you make changes in your code
+// Go to Run / Add Configuration
+// This will create the folder .vscode and file launch.json to your file
+// track the changes there
+// for this you have to have nodemon installed globally
