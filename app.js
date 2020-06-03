@@ -167,3 +167,14 @@ Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the cli
 // they are storing, trying to find your way through the problem
 
 // or of course you can use the debugger, which we will see on the next lecture
+
+//////////////////////////////////////////////////////////
+
+// Using the Debugger
+
+// 1) Go to your main page: app.js
+// 2) Click on Run/Start Debugging (or press F5)
+// 3) Click on the left side of the line number of whatever file you want to debug
+// 4) Go to your application and navigate until you execute the code you placed the breakpoint
+// 5) The execution will stop and the debugger will pop up
+// 6) Now you can watch variables, step line by line on your code etc.
