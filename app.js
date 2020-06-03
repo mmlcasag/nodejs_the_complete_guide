@@ -146,3 +146,24 @@ Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the cli
 // Cannot set headers after they are sent to the client
 // if the message doesn't really tell you much
 // you can also of course google it for more information
+
+//////////////////////////////////////////////////////////
+
+// Logical Error Example
+
+// The most difficult one to fix because it won't give you any error message
+// it won't break, the app will just not behave the way you expect it to
+
+// Let's pretend for example that we made a mistake at line 24 at routes.js file
+// and used const message = parsedBody.split('=')[0];
+// this won't cause an error
+// but everytime you write any value on your application, the value "message" is
+// written on the text file.
+// why? imagine another development having to maintain this code and having no idea
+// the problem is because there should be position [1] instead of [0]
+
+// one way of trying to go after that error is placing console.log very frequently
+// throughout your code, so you can grasp the idea of the variables and the values 
+// they are storing, trying to find your way through the problem
+
+// or of course you can use the debugger, which we will see on the next lecture
