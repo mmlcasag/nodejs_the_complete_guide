@@ -1,0 +1,25 @@
+{
+  "name": "nodejs_the_complete_guide",
+  "version": "1.0.0",
+  "description": "Node.js - The Complete Guide (Udemy Course)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "blablabla": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmlcasag/nodejs_the_complete_guide.git"
+  },
+  "keywords": [
+    "udemy",
+    "nodejs"
+  ],
+  "author": "Márcio Luís Casagrande",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmlcasag/nodejs_the_complete_guide/issues"
+  },
+  "homepage": "https://github.com/mmlcasag/nodejs_the_complete_guide#readme"
+}
