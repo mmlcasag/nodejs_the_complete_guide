@@ -1,4 +1,4 @@
-cons http = require('http');
+const http = require('http');
 
 const routes = require('./routes');
 
@@ -114,3 +114,35 @@ SyntaxError: Unexpected identifier
 
 // This is the easiest because it gives you hints to where the problem is
 // It doesn't alway give you the correct line, but points you about the right direction
+
+//////////////////////////////////////////////////////////
+
+// Runtime Errors Example
+
+// I'm removing the "return" on line 13 of routes.js file
+// This means that after handling the request of the '/' page
+// the program will run until line 33
+// and as we already know, the server can't receite another response
+// after res.end()
+// so this will cause a runtime error
+
+/*
+_http_outgoing.js:526
+    throw new ERR_HTTP_HEADERS_SENT('set');
+    ^
+
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at ServerResponse.setHeader (_http_outgoing.js:526:11)
+    at Server.requestHandler (D:\OneDrive\Documentos\nodejs_the_complete_guide\routes.js:33:9)
+    at Server.emit (events.js:310:20)
+    at parserOnIncoming (_http_server.js:786:12)
+    at HTTPParser.parserOnHeadersComplete (_http_common.js:119:17) {
+  code: 'ERR_HTTP_HEADERS_SENT'
+}
+*/
+
+// altough node.js doesn't give you the specific line that triggered the error
+// the message pretty much gives you a very good hint:
+// Cannot set headers after they are sent to the client
+// if the message doesn't really tell you much
+// you can also of course google it for more information
