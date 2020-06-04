@@ -23,5 +23,8 @@
   "homepage": "https://github.com/mmlcasag/nodejs_the_complete_guide#readme",
   "devDependencies": {
     "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
