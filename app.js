@@ -35,7 +35,13 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
     console.log('In yet another middleware');
+    // res.setHeader('Content-Type', 'text/html'); // you still can call res.setHeader()
+    // res.write('<h1>Okay, you got it, right?</h1>'); // you can still call res.write()
+    // but now express.js makes things simpler with the function res.send()
     res.send('<h1>Okay, you got it, right?</h1>'); // res.send finishes the request and sends the response
+    // by default it sets the Content-Type to text/html everytime it detects a string in the response
+    // you can override this by using res.setHeader() of course
+    // and also you don't need to use res.end() anymore.
 });
 
 // the app also happens to be a request handler
