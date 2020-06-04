@@ -1,4 +1,4 @@
-const http = require('http');
+// const http = require('http');
 
 // how to install express.js?
 // npm install express --save
@@ -44,8 +44,14 @@ app.use((req, res, next) => {
     // and also you don't need to use res.end() anymore.
 });
 
-// the app also happens to be a request handler
-// so you can pass it as an argument to the createServer
-const server = http.createServer(app);
-
-server.listen(3000);
+// we can shorten this code here
+// we can pass app the createServer method
+// but we can also app.listen
+// and this will do both this things for us
+// the app.listen method checks if we have already created a server
+// if not, it creates for us, so this code below 
+// const server = http.createServer(app);
+// server.listen(3000);
+// can be replaced by
+app.listen(3000);
+// and now we don't even need to import the http module anymore
