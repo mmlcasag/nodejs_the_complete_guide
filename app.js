@@ -1,29 +1,37 @@
+// create a npm project and install express.js with nodemon if you want
+
+// create an express.js app which funnels the requests through 2
+// middleware functions that log something to the console and return one response
+
+// handle requests to '/' and '/users' such that each request only has one
+// handler/middleware that does something with it (e.g. send dummy response )
+
 const express = require('express');
 
 const app = express();
 
-// how to handle different routes?
-
-// this handles the '/' request
-// but what if a request the '/help' page?
-// this triggers too
-// why?
-// because this means that the request must start with '/'
-// so, '/help' is also valid
-// and what to do if you want to display a different page for '/help?'
-// place the '/help' handler before the '/'
-// and what if I want to use a middleware that runs before both handlers?
-app.use('/', (req, res, next) => {
-    console.log('I am a middleware!');
-    next(); // don't forget the next() function!
+/*
+app.use((req, res, next) => {
+    console.log('Middleware 1!');
+    next();
 });
 
-app.use('/help', (req, res, next) => {
-    res.send('<h1>Ja ja ja, Was ist los? Was ist das?</h1>');
+app.use((req, res, next) => {
+    console.log('Middleware 2!');
+    next();
 });
 
 app.use('/', (req, res, next) => {
-    res.send('<h1>Eins Zwei Polizei!</h1>');
+    res.send('<h1>Response!</h1>');
+});
+*/
+
+app.use('/user', (req, res, next) => {
+    res.send('<h1>This is the "User" Page!</h1>');
+});
+
+app.use('/', (req, res, next) => {
+    res.send('<h1>This is the "Main" Page!</h1>');
 });
 
 app.listen(3000);
