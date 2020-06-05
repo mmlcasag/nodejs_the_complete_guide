@@ -5,13 +5,11 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorRoutes = require('./routes/error');
 
-// instead of using __dirname and then .. to go up one level
-// there's ine better way to solve this
-// and this is by using a helper
-// so i'm creating a utils folder and a file named root.js
-// and i'll import it on my routes and replace the path joins
-
 const app = express();
+
+// this lecture shows how to style our pages
+// so basically all that i did was to the edit all html files
+// placing some css inside
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/admin', adminRoutes);
