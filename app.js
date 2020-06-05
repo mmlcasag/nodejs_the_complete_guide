@@ -8,6 +8,8 @@
 // for example views/layouts/main.pug line 8 and 20
 // then on your other pug files you can extend your layout
 // for example checkout the 404.pug file
+// now let's set the active class in the page we are browsing
+// so let's create a new parameter path in every routes file
 
 const express = require('express');
 const bodyParser = require('body-parser');
