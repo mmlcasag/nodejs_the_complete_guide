@@ -8,12 +8,10 @@ const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// what if i want to add a '/admin' before every route inside admin.js?
-// instead of going one by one inside the file
-// you can do it like that
+// How to create views for our project?
+// Well, I have created the views folder
+// and the shop.html and add-product.html files within it
 app.use('/admin', adminRoutes);
-// now you have to access /admin/add-product
-// and submit to /admin/product
 app.use(shopRoutes);
 
 app.use((req, res, next) => {
