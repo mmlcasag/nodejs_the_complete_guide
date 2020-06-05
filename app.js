@@ -1,29 +1,37 @@
+const bodyParser = require('body-parser');
+
 const express = require('express');
 
 const app = express();
 
-// how to handle different routes?
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// this handles the '/' request
-// but what if a request the '/help' page?
-// this triggers too
-// why?
-// because this means that the request must start with '/'
-// so, '/help' is also valid
-// and what to do if you want to display a different page for '/help?'
-// place the '/help' handler before the '/'
-// and what if I want to use a middleware that runs before both handlers?
 app.use('/', (req, res, next) => {
     console.log('I am a middleware!');
-    next(); // don't forget the next() function!
+    next();
 });
 
-app.use('/help', (req, res, next) => {
-    res.send('<h1>Ja ja ja, Was ist los? Was ist das?</h1>');
+app.use('/add-product', (req, res, next) => {
+    res.send('<html><body><form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form></body></html>');
+});
+
+// it doesn't matter if you place this handler before or after /add-product because the names are different
+app.use('/product', (req, res, next) => {
+    // how to the get the request body with express.js?
+    console.log(req.body);
+    // now it's just req.body!
+    // instead of having to register all those event listeners!
+    // the only problem is that it logs as "undefined"
+    // to deal with it, we need to install another third-party package: body-parser
+    // so let's run npm install body-parser --save
+    // then we have to import it (line 1)
+    // and register via app.use() (line 7)
+    // now you can try again to see how it logs req.body in the console
+    res.redirect('/'); 
 });
 
 app.use('/', (req, res, next) => {
-    res.send('<h1>Eins Zwei Polizei!</h1>');
+    res.send('<h1>This is our "Main" page</h1>');
 });
 
 app.listen(3000);
