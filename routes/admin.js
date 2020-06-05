@@ -1,17 +1,12 @@
 const express = require('express');
 
-const path = require('path');
-
-const root = require('../utils/root');
-
 const router = express.Router();
 
 // to store our added products
 const products = [];
 
 router.get('/add-product', (req, res, next) => {
-    const dirfile = path.join(root, 'views', 'add-product.html');
-    res.sendFile(dirfile);
+    res.render('add-product', { pageTitle: 'Add Product Page' });
 });
 
 router.post('/add-product', (req, res, next) => {

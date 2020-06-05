@@ -1,9 +1,5 @@
 const express = require('express');
 
-const path = require('path');
-
-const root = require('../utils/root');
-
 // importing our admin file
 const admin = require('./admin');
 
@@ -33,7 +29,7 @@ router.get('/', (req, res, next) => {
     // it's really easy
     // instead of res.render('shop');
     // we do it like that:
-    res.render('shop', { products: admin.products, pageTitle: 'Shop Page' });
+    res.render('shop', { pageTitle: 'Shop Page', products: admin.products });
     // now we can refer to the admin.products array by the name products inside the pug file
 });
 
