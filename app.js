@@ -15,18 +15,15 @@ app.use('/add-product', (req, res, next) => {
     res.send('<html><body><form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form></body></html>');
 });
 
-// it doesn't matter if you place this handler before or after /add-product because the names are different
-app.use('/product', (req, res, next) => {
-    // how to the get the request body with express.js?
+// this middleware is executing for both get requests and posts requests
+// it should execute only for posts requests
+// what can we do regarding that?
+// we can use app.get() to filter for get requests only
+// we can use app.post() to filter for post requests only
+// app.use() execute for both methods
+// so all you have to do is change to app.post()
+app.post('/product', (req, res, next) => {
     console.log(req.body);
-    // now it's just req.body!
-    // instead of having to register all those event listeners!
-    // the only problem is that it logs as "undefined"
-    // to deal with it, we need to install another third-party package: body-parser
-    // so let's run npm install body-parser --save
-    // then we have to import it (line 1)
-    // and register via app.use() (line 7)
-    // now you can try again to see how it logs req.body in the console
     res.redirect('/'); 
 });
 
