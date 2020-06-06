@@ -26,8 +26,12 @@ const writeContentToFile = (fileDirectory, fileContent) => {
 }
 
 module.exports = class Product {
-    constructor(title) {
+    constructor(title, author, image, price, description) {
         this.title = title;
+        this.author = author;
+        this.image = image;
+        this.price = price;
+        this.description = description;
     }
 
     save() {

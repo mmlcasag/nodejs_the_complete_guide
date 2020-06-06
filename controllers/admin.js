@@ -19,7 +19,14 @@ module.exports.getAddProduct = (req, res, next) => {
 
 module.exports.postAddProduct = (req, res, next) => {
     const product = new Product();
+    
     product.title = req.body.title;
+    product.author = req.body.author;
+    product.image = req.body.image;
+    product.price = req.body.price;
+    product.description = req.body.description;
+    
     product.save();
+
     res.redirect('/'); 
 }
