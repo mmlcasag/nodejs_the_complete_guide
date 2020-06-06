@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('includes/header.ejs') %>
+<%- include('includes/navigation.ejs') %>
+    <p>Our Users:</p>
+    <ul>
+    <% if (users.length > 0) { %>
+        <% for (let user of users) { %>
+            <li><%= user.name %></li>
+        <% } %>
+    <% } else { %>
+        <li>Currently we don't have any users.</li>
+    <% } %>
+    </ul>
+    <p><a href="/add-user">Add User</a></p>
+<%- include('includes/footer.ejs') %>
