@@ -1,4 +1,4 @@
-const adminRoutes = require('../routes/admin');
+const Product = require('../models/product');
 
 module.exports.getAddProduct = (req, res, next) => {
     res.render('add-product', {
@@ -8,6 +8,8 @@ module.exports.getAddProduct = (req, res, next) => {
 };
 
 module.exports.postAddProduct = (req, res, next) => {
-    adminRoutes.products.push({ title: req.body.title });
+    const product = new Product();
+    product.title = req.body.title;
+    product.save();
     res.redirect('/'); 
 }
