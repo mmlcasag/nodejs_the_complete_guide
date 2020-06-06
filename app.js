@@ -18,7 +18,11 @@ const app = express();
 // and then we need to tell express.js that our module can be used as a view engine
 // we don't need to do this for pug or ejs because express.js already "knows" them
 // but handlebars is a little bit different here
-app.engine('handlebars', handlebars());
+app.engine('handlebars', handlebars({
+    layoutsDir: 'views/layouts/',
+    defaultLayout: 'main',
+    extname: 'handlebars'
+}));
 
 // after that you can set handlebars as a view engine, as you would do with pug or ejs
 app.set('view engine', 'handlebars');

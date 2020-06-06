@@ -5,7 +5,16 @@ const router = express.Router();
 const products = [];
 
 router.get('/add-product', (req, res, next) => {
-    res.render('add-product', { pageTitle: 'Add Product Page', path: '/admin/add-product' });
+    // handlebars forbids logic inside the view
+    const attributes = {
+        pageTitle: 'Add Product Page',
+        formsCss: true,
+        productCss: true,
+        activeMenuShop: false,
+        activeMenuProd: true,
+        path: '/admin/add-product'
+    };
+    res.render('add-product', attributes);
 });
 
 router.post('/add-product', (req, res, next) => {
