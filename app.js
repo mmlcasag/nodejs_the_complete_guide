@@ -1,18 +1,10 @@
-// this lesson teached how to extract duplicated code from the html pages
-// and place it in templates
-// so in views, lets create a layouts folder
-// and a file named main.pug
-// so, how to reuse our skeleton?
-// we can extend this layouts from inside our other pug files
-// and we can define some placeholders where others views can enter their content
-// for example views/layouts/main.pug line 8 and 20
-// then on your other pug files you can extend your layout
-// for example checkout the 404.pug file
-// now let's set the active class in the page we are browsing
-// so let's create a new parameter path in every routes file
-
 const express = require('express');
 const bodyParser = require('body-parser');
+
+// ok so we have finished our pug lesson
+// so let's now dive into handlebars! \o/
+// and tje first thing we need to do is to import the module
+const handlebars = require('express-handlebars');
 
 const path = require('path');
 const root = require('./utils/root');
@@ -23,8 +15,20 @@ const errorRoutes = require('./routes/error');
 
 const app = express();
 
-app.set('view engine', 'pug');
+// and then we need to tell express.js that our module can be used as a view engine
+// we don't need to do this for pug or ejs because express.js already "knows" them
+// but handlebars is a little bit different here
+app.engine('handlebars', handlebars());
+
+// after that you can set handlebars as a view engine, as you would do with pug or ejs
+app.set('view engine', 'handlebars');
+
+// and also define the views folder, same thing as before
 app.set('views', 'views');
+
+// a side note: you have to name your views with the same extension as you defined at line 21 and 24
+// in this case, handlebars.
+// you I had typed hbs, for example, than my views should be 404.hbs, shop.hbs, etc...
 
 app.use(express.static(path.join(root, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
