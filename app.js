@@ -18,6 +18,10 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+// the only problem with ejs is that it doesn't support layouts
+// but there's a workaround for that and that is the includes
+// check out the includes folder inside of views
+
 app.use(express.static(path.join(root, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/admin', admin.routes);
