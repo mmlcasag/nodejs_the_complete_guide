@@ -38,14 +38,10 @@ module.exports = class Product {
         });
     }
 
-    static fetchAll() {
-        /*
-        return readContentFromFile(fileDirectory, fileContent => {
+    static fetchAll(callback) {
+        readContentFromFile(fileDirectory, fileContent => {
             const products = [...fileContent];
-            console.log(products);
-            return products;
+            callback(products);
         });
-        */
-        return [];
     }
 }
