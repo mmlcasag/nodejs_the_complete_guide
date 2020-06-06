@@ -4,6 +4,6 @@ const errorController = require('../controllers/error');
 
 const router = express.Router();
 
-router.use('/', errorController.getErrorPage);
+router.use(errorController.getErrorPage);
 
 module.exports = router;
