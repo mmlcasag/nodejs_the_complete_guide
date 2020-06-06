@@ -1,12 +1,9 @@
 const express = require('express');
 
+const errorController = require('../controllers/error');
+
 const router = express.Router();
 
-router.use('/', (req, res, next) => {
-    res.render('404', {
-        pageTitle: '404 Page',
-        path: '/error'
-    });
-});
+router.use('/', errorController.getErrorPage);
 
 module.exports = router;
