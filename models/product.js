@@ -5,6 +5,10 @@ const root = require('../utils/root');
 
 const fileDirectory = path.join(root, 'data', 'products.json');
 
+const generateId = () => {
+    return Math.floor(Math.random() * (999999 - 1 + 1)) + 1;
+}
+
 const readContentFromFile = (fileDirectory, callback) => {
     fs.readFile(fileDirectory, (err, fileContent) => {
         if (err) {
@@ -27,6 +31,7 @@ const writeContentToFile = (fileDirectory, fileContent) => {
 
 module.exports = class Product {
     constructor(title, author, image, price, description) {
+        this.id = null;
         this.title = title;
         this.author = author;
         this.image = image;
@@ -35,6 +40,7 @@ module.exports = class Product {
     }
 
     save() {
+        this.id = generateId();
         readContentFromFile(fileDirectory, fileContent => {
             const products = [...fileContent];
             products.push(this);
