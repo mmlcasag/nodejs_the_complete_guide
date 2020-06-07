@@ -1,3 +1,4 @@
+const Cart = require('../models/cart');
 const Product = require('../models/product');
 
 module.exports.getHome = (req, res, next) => {
@@ -39,7 +40,7 @@ module.exports.getCart = (req, res, next) => {
 
 module.exports.postCart = (req, res, next) => {
     Product.loadById(req.body.id, product => {
-        console.log(product);
+        Cart.add(product);
         res.redirect('/cart');
     });
 }
