@@ -25,6 +25,30 @@ const database = require('./utils/database');
 // but we don't have any tables yet
 // let's create our first table on the next lecture
 
+// ok, now we are back with our products table created and we also inserted a record there manually
+// so now let's go back to our query here
+// since mysql returns promises we can chain methods like then() e catch()
+// these are functions we can chain on to the result of the execute call
+// so they will execute whenever the result comes back
+// let's start the application and see what we get
+database.execute('SELECT * FROM products')
+    .then((result) => { // this executes if the command runs successfully
+        console.log(result);
+        // inspecting the result we can see that it returns an array with 2 elements
+        // the first element being an array with an object inside
+        // the object being the result of the SQL query we just ran
+        // the second element being an array of objects 
+        // probably metadata for the query we executed
+        // these objects seem to hold information about the datatypes of the table columns
+        // so let's now try to just log the first element of the result
+        console.log(result[0]);
+        // now it looks more decent
+        // on our next lesson we are going to work with SQL queries on our models
+    })
+    .catch((error) => { // this executes in a case a problem occurs
+        console.log(error);
+    });
+
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorRoutes = require('./routes/error');
