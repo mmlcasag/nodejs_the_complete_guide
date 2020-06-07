@@ -21,15 +21,13 @@ module.exports.getProducts = (req, res, next) => {
 }
 
 module.exports.getProductDetails = (req, res, next) => {
-    console.log(req.params.id);
-    /*
-    const product = Product.loadById(req.params.id);
-    res.render('shop/product-detail', {
-        pageTitle: 'Products',
-        path: '/products',
-        product: product
+    Product.loadById(req.params.id, product => {
+        res.render('shop/product-detail', {
+            pageTitle: product.title,
+            path: '/products',
+            product: product
+        });
     });
-    */
 }
 
 module.exports.getCart = (req, res, next) => {

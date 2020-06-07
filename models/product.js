@@ -48,8 +48,11 @@ module.exports = class Product {
         });
     }
 
-    static loadById() {
-        
+    static loadById(id, callback) {
+        readContentFromFile(fileDirectory, fileContent => {
+            const product = fileContent.find(prod => prod.id === id);
+            callback(product);
+        });
     }
 
     static fetchAll(callback) {
