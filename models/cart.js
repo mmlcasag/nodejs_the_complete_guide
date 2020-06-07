@@ -60,5 +60,22 @@ module.exports = class Cart {
             writeContentToFile(fileDirectory, cart);
         });
     }
-   
+
+    static remove(product) {
+        readContentFromFile(fileDirectory, fileContent => {
+            // creates a local copy of the object
+            const cart = {...fileContent};
+            // finds the product inside the array
+            const existingProduct = cart.products.find(prod => prod.id === product.id);
+            // updates the totalPrice of the cart subtracting the price times the quantity
+            if (existingProduct) {
+                cart.totalPrice = cart.totalPrice - (existingProduct.qty * product.price);
+            }
+            // returns every product with an id different from the one we are trying to delete
+            cart.products = cart.products.filter(prod => prod.id !== product.id);
+            // save the new array without the product we are trying to delete
+            writeContentToFile(fileDirectory, cart);
+        });
+    }
+    
 }

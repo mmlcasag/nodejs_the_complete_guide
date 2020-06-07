@@ -3,6 +3,8 @@ const path = require('path');
 
 const root = require('../utils/root');
 
+const Cart = require('./cart');
+
 const fileDirectory = path.join(root, 'data', 'products.json');
 
 const generateId = () => {
@@ -59,13 +61,15 @@ module.exports = class Product {
             });
         }
     }
-    
-    static remove(id) {
+
+    static remove(product) {
         readContentFromFile(fileDirectory, fileContent => {
             // creates a local copy of the array
             const productsBeforeDelete = [...fileContent];
             // returns every product with an id different from the one we are trying to delete
-            const productsAfterDelete = productsBeforeDelete.filter(prod => prod.id !== id);
+            const productsAfterDelete = productsBeforeDelete.filter(prod => prod.id !== product.id);
+            // Also deletes the product from the cart, it there is the product there
+            Cart.remove(product);
             // save the new array without the product we are trying to delete
             writeContentToFile(fileDirectory, productsAfterDelete);
         });
