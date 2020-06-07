@@ -41,9 +41,18 @@ module.exports.getCart = (req, res, next) => {
     });
 }
 
-module.exports.postCart = (req, res, next) => {
-    Product.loadById(req.body.id, product => {
+module.exports.postAddToCart = (req, res, next) => {
+    const id = req.body.id;
+    Product.loadById(id, product => {
         Cart.add(product);
+        res.redirect('/cart');
+    });
+}
+
+module.exports.postDeleteFromCart = (req, res, next) => {
+    const id = req.body.id;
+    Product.loadById(id, product => {
+        Cart.remove(product);
         res.redirect('/cart');
     });
 }

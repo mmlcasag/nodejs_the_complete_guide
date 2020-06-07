@@ -81,9 +81,6 @@ module.exports = class Cart {
     static fetchAll(callback) {
         readContentFromFile(fileDirectory, fileContent => {
             const cart = {...fileContent};
-            cart.products.forEach( product => {
-                console.log(product.id, product.product, product.qty);
-            });
             callback(cart);
         });
     }

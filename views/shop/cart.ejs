@@ -24,7 +24,7 @@
                     <td align="right">$<%= itemcart.product.price %></td>
                     <td align="right">$<%= itemcart.product.price * itemcart.qty %></td>
                     <td align="center">
-                        <form action="/admin/delete-product" method="post">
+                        <form action="/delete-from-cart" method="post">
                             <input type="hidden" name="id" value="<%= itemcart.id %>">
                             <button class="btn" type="submit">Delete</button>
                         </form>
