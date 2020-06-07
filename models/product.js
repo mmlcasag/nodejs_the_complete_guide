@@ -6,7 +6,8 @@ const root = require('../utils/root');
 const fileDirectory = path.join(root, 'data', 'products.json');
 
 const generateId = () => {
-    return Math.floor(Math.random() * (999999 - 1 + 1)) + 1;
+    const id = Math.floor(Math.random() * (999999 - 1 + 1)) + 1;
+    return id.toString();
 }
 
 const readContentFromFile = (fileDirectory, callback) => {
