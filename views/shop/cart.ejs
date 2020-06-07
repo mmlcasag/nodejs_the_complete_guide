@@ -1,4 +1,43 @@
 <%- include('../includes/head.ejs') %>
 <%- include('../includes/navigation.ejs') %>
-    <p>Cart is empty</p>
+    <% if (cart.products.length > 0) { %>
+        <table border="0" width="100%">
+            <thead>
+                <tr>
+                    <th align="left" colspan="2">Product</th>
+                    <th align="right" width="100px">Qty</th>
+                    <th align="right" width="100px">Price</th>
+                    <th align="right" width="100px">Subtotal</th>
+                    <th align="center" width="25%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% for (let itemcart of cart.products) { %>
+                <tr>
+                    <td align="left" width="75px"><img src="<%= itemcart.product.image %>" alt="<%= itemcart.product.title %>" height="75px"></td>
+                    <td align="left">
+                        <b><%= itemcart.product.title %></b>
+                        <br>
+                        <sub>by <%= itemcart.product.author %></sub>
+                    </td>
+                    <td align="right"><%= itemcart.qty %></td>
+                    <td align="right">$<%= itemcart.product.price %></td>
+                    <td align="right">$<%= itemcart.product.price * itemcart.qty %></td>
+                    <td align="center">
+                        <form action="/admin/delete-product" method="post">
+                            <input type="hidden" name="id" value="<%= itemcart.id %>">
+                            <button class="btn" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+            <tr>
+                <th colspan="4" align="right">Total</th>
+                <th align="right">$<%= cart.totalPrice %></th>
+            </tr>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>Cart is empty</p>
+    <% } %>
 <%- include('../includes/end.ejs') %>

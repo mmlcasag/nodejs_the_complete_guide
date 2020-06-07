@@ -32,9 +32,12 @@ module.exports.getProductDetails = (req, res, next) => {
 }
 
 module.exports.getCart = (req, res, next) => {
-    res.render('shop/cart', {
-        pageTitle: 'Cart',
-        path: '/cart'
+    Cart.fetchAll(cart => {
+        res.render('shop/cart', {
+            pageTitle: 'Cart',
+            path: '/cart',
+            cart: cart
+        });
     });
 }
 

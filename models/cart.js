@@ -50,7 +50,7 @@ module.exports = class Cart {
             // if not found
             } else {
                 // creates the new object
-                updatedProduct = { id: product.id, qty: 1 };
+                updatedProduct = { id: product.id, product: product, qty: 1 };
                 // and adds it to the cart
                 cart.products = [...cart.products, updatedProduct];
             }
@@ -78,4 +78,14 @@ module.exports = class Cart {
         });
     }
     
+    static fetchAll(callback) {
+        readContentFromFile(fileDirectory, fileContent => {
+            const cart = {...fileContent};
+            cart.products.forEach( product => {
+                console.log(product.id, product.product, product.qty);
+            });
+            callback(cart);
+        });
+    }
+
 }
