@@ -27,7 +27,7 @@ module.exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     
-    const product = new Product(title, author, image, price, description);
+    const product = new Product(null, title, author, image, price, description);
     
     product.save();
 
@@ -55,7 +55,7 @@ module.exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     
-    const product = new Product(title, author, image, price, description);
+    const product = new Product(id, title, author, image, price, description);
     
     product.save();
 

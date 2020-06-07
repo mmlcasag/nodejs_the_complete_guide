@@ -31,8 +31,8 @@ const writeContentToFile = (fileDirectory, fileContent) => {
 }
 
 module.exports = class Product {
-    constructor(title, author, image, price, description) {
-        this.id = null;
+    constructor(id, title, author, image, price, description) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.image = image;
@@ -41,12 +41,23 @@ module.exports = class Product {
     }
 
     save() {
-        this.id = generateId();
-        readContentFromFile(fileDirectory, fileContent => {
-            const products = [...fileContent];
-            products.push(this);
-            writeContentToFile(fileDirectory, products);
-        });
+        if (this.id) {
+            // logic for updating an existing product
+            readContentFromFile(fileDirectory, fileContent => {
+                const products = [...fileContent];
+                const existingProductIndex = products.findIndex(prod => prod.id === this.id)
+                products[existingProductIndex] = this;
+                writeContentToFile(fileDirectory, products);
+            });
+        } else {
+            // logic for inserting a new product
+            this.id = generateId();
+            readContentFromFile(fileDirectory, fileContent => {
+                const products = [...fileContent];
+                products.push(this);
+                writeContentToFile(fileDirectory, products);
+            });
+        }
     }
 
     static loadById(id, callback) {
