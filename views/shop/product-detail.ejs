@@ -9,10 +9,7 @@
                 <h3 class="product__author">by <%= product.author %></h3>
                 <h2 class="product__price">$<%= product.price %></h2>
                 <p class="product__description"><%= product.description %></p>
-                <form action="/cart" action="post">
-                    <input type="hidden" name="id" value="<%= product.id %>">
-                    <button class="btn">Add to Cart</button>
-                </form>
+                <%- include('../includes/add-to-cart.ejs', { product: product }) %>
             </td>
         </tr>
     </table>
