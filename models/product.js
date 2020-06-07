@@ -48,6 +48,10 @@ module.exports = class Product {
         });
     }
 
+    static loadById() {
+        
+    }
+
     static fetchAll(callback) {
         readContentFromFile(fileDirectory, fileContent => {
             const products = [...fileContent];
