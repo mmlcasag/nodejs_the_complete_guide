@@ -97,9 +97,15 @@ module.exports.postEditProduct = (req, res, next) => {
 
 module.exports.postDeleteProduct = (req, res, next) => {
     const id = req.body.id;
+    // we can use the destroy method()
+    // Product.destroy({ where: { id: id } });
+    // or we can do it like that:
     Product.findByPk(id)
         .then(product => {
-            Product.delete(product);
+            // we can return this because destroy() also returns a Promise
+            return product.destroy();
+        })
+        .then(result => {
             res.redirect('/admin/products');
         })
         .catch(err => {
