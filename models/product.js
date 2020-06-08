@@ -13,15 +13,21 @@ module.exports = class Product {
     }
 
     save() {
-        
+        const query = ' INSERT INTO products ( title, author, image, price, description ) VALUES ( ?, ?, ?, ?, ? ) ';
+        const binds = [ this.title, this.author, this.image, this.price, this.description ];
+        return database.execute(query, binds);
     }
 
     static remove(product) {
-        
+        const query = ' DELETE FROM products WHERE id = ? ';
+        const binds = [ product.id ];
+        return database.execute(query, binds);
     }
 
     static loadById(id) {
-        
+        const query = ' SELECT * FROM products WHERE id = ? ';
+        const binds = [ id ];
+        return database.execute(query, binds);
     }
     
     static fetchAll() {
@@ -30,7 +36,8 @@ module.exports = class Product {
         // So let's adjust wherever in the project there is a call for fetchAll()
         // --> admin.js
         // --> shop.js
-        return database.execute(' SELECT * FROM products ORDER by id ');
+        const query = ' SELECT * FROM products ORDER by id ';
+        return database.execute(query);
     }
 
 }

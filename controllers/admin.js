@@ -33,9 +33,13 @@ module.exports.postAddProduct = (req, res, next) => {
     
     const product = new Product(null, title, author, image, price, description);
     
-    product.save();
-
-    res.redirect('/admin/products'); 
+    product.save()
+        .then(() => {
+            res.redirect('/admin/products');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 module.exports.getEditProduct = (req, res, next) => {
@@ -61,9 +65,13 @@ module.exports.postEditProduct = (req, res, next) => {
     
     const product = new Product(id, title, author, image, price, description);
     
-    product.save();
-
-    res.redirect('/admin/products');
+    product.save()
+        .then(() => {
+            res.redirect('/admin/products');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 module.exports.postDeleteProduct = (req, res, next) => {
