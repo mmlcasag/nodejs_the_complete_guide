@@ -31,13 +31,18 @@ module.exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     
-    const product = new Product(null, title, author, image, price, description);
-    
-    product.insert()
-        .then(() => {
-            res.redirect('/admin/products');
+    Product.create({
+        title: title,
+        author: author,
+        image: image,
+        price: price,
+        description: description
+    })
+        .then(result => {
+            // console.log(result);
+            console.log('Product created!');
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
         });
 };

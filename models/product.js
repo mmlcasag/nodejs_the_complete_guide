@@ -12,6 +12,10 @@ const Product = sequelize.define('product', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    author: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     image: {
         type: Sequelize.STRING,
         allowNull: false
