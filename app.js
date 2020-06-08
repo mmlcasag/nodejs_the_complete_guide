@@ -3,6 +3,7 @@
 // then lets delete the products table we created on the previous lesson
 // we do that because we want sequelize to manage our tables
 // ok, now lets go to our configuration file, de utils/database.js
+// ok, now lets edit our product model!
 
 const express = require('express');
 const bodyParser = require('body-parser');
