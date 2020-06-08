@@ -2,7 +2,7 @@
 // now we want to connect sequelize with mysql2
 
 // so, first we need to import it
-const Sequelize = require('mysql2');
+const Sequelize = require('sequelize');
 // and then to instantiate it
 const sequelize = new Sequelize('nodejs-the-complete-guide', 'root', 'root', { host: 'localhost', dialect: 'mysql' });
 
