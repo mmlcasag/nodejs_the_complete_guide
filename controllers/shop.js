@@ -3,7 +3,7 @@ const Product = require('../models/product');
 
 module.exports.getHome = (req, res, next) => {
     Product.fetchAll()
-        .then(([rows, metadata]) => {
+        .then(([rows]) => {
             res.render('shop/home', {
                 pageTitle: 'Home',
                 path: '/',
@@ -11,18 +11,22 @@ module.exports.getHome = (req, res, next) => {
             });
         })
         .catch((err) => {
-            console.log(err)
+            console.log(err);
         });
 }
 
 module.exports.getProducts = (req, res, next) => {
-    Product.fetchAll(products => {
-        res.render('shop/products', {
-            pageTitle: 'Products',
-            path: '/products',
-            products: products
+    Product.fetchAll()
+        .then(([rows]) => {
+            res.render('shop/products', {
+                pageTitle: 'Products',
+                path: '/products',
+                products: rows
+            });
+        })
+        .catch((err) => {
+            console.log(err);
         });
-    });
 }
 
 module.exports.getProductDetails = (req, res, next) => {

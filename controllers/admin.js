@@ -1,13 +1,17 @@
 const Product = require('../models/product');
 
 module.exports.getProducts = (req, res, next) => {
-    Product.fetchAll(products => {
-        res.render('admin/products', {
-            pageTitle: 'Admin Products',
-            path: '/admin/products',
-            products: products
+    Product.fetchAll()
+        .then(([rows]) => {
+            res.render('admin/products', {
+                pageTitle: 'Admin Products',
+                path: '/admin/products',
+                products: rows
+            });
+        })
+        .catch((err) => {
+            console.log(err);
         });
-    });
 };
 
 module.exports.getAddProduct = (req, res, next) => {
