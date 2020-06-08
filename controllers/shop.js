@@ -2,29 +2,33 @@ const Cart = require('../models/cart');
 const Product = require('../models/product');
 
 module.exports.getHome = (req, res, next) => {
-    Product.fetchAll()
-        .then(([rows]) => {
+    // in sequelize we use findAll instead of fetchAll
+    // we can pass as argument a where clause: Product.findAll({ where: id === 1 })
+    Product.findAll()
+        .then(products => {
             res.render('shop/home', {
                 pageTitle: 'Home',
                 path: '/',
-                products: rows
+                products: products
             });
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
         });
+    // so let's see how it shows if the run the application!
+    // it worked!
 }
 
 module.exports.getProducts = (req, res, next) => {
-    Product.fetchAll()
-        .then(([rows]) => {
+    Product.findAll()
+        .then(products => {
             res.render('shop/products', {
                 pageTitle: 'Products',
                 path: '/products',
-                products: rows
+                products: products
             });
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
         });
 }
