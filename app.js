@@ -1,3 +1,9 @@
+// first thing to do is to npm install sequelize --save
+// you have to have run the npm install mysql2 --save prior to installing sequelize
+// then lets delete the products table we created on the previous lesson
+// we do that because we want sequelize to manage our tables
+// ok, now lets go to our configuration file, de utils/database.js
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
