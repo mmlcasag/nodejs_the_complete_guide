@@ -1,12 +1,12 @@
 const Product = require('../models/product');
 
 module.exports.getProducts = (req, res, next) => {
-    Product.fetchAll()
-        .then(([rows]) => {
+    Product.findAll()
+        .then(products => {
             res.render('admin/products', {
                 pageTitle: 'Admin Products',
                 path: '/admin/products',
-                products: rows
+                products: products
             });
         })
         .catch((err) => {
@@ -50,12 +50,12 @@ module.exports.postAddProduct = (req, res, next) => {
 module.exports.getEditProduct = (req, res, next) => {
     const id = req.params.id;
     const editing = req.query.editing;
-    Product.loadById(id)
-        .then(([product]) => {
+    Product.findByPk(id)
+        .then(product => {
             res.render('admin/edit-product', {
                 pageTitle: 'Edit Product',
                 path: '/admin/products',
-                product: product[0],
+                product: product,
                 editing: (editing === 'true')
             });
         })
@@ -78,19 +78,19 @@ module.exports.postEditProduct = (req, res, next) => {
         .then(() => {
             res.redirect('/admin/products');
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
         });
 };
 
 module.exports.postDeleteProduct = (req, res, next) => {
     const id = req.body.id;
-    Product.loadById(id)
-        .then(([product]) => {
-            Product.delete(product[0]);
+    Product.findByPk(id)
+        .then(product => {
+            Product.delete(product);
             res.redirect('/admin/products');
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
         });
 };
