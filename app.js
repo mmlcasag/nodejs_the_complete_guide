@@ -21,6 +21,29 @@ app.set('views', 'views');
 
 app.use(express.static(path.join(root, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// we want to add a middleware before the default routes
+// adding a User to the request
+// later we will adjust this to have always the logged user
+// but for now it's fine just with the admin user
+app.use((req, res, next) => {
+    User.findByPk(1)
+        .then(user => {
+            // we want to store this user in the request
+            // so we can add the user an attribute called user
+            // we can create a new field to our request object
+            // just make sure you don't override an existing one, like body
+            req.user = user;
+            // now, all we need to do is call next()
+            // all the routes above will inherit the req.user
+            // so they can use them
+            next();
+        })
+        .catch(err => {
+            console.log(err);
+        })
+});
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(errorRoutes);
@@ -42,8 +65,29 @@ User.hasMany(Product);
 // so how can we force the recreation of the structure?
 // turns out we can pass an argument called {force: true} inside the sync() function
 // never use force: true in production!
-sequelize.sync({force: true})
+sequelize
+    //.sync({force: true})
+    .sync()
     .then(result => {
+        // just making sure that we have at least 1 user, creating a generic user in case we don't have any
+        return User.findByPk(1);
+    })
+    .then(user => {
+        if (!user) {
+            // if sequelize didn't find any user, we will create one here
+            // and since the create() function returns a Promise
+            // we will return it to handle it below
+            return User.create({ name: 'Admin', email: 'admin@shop.com' });
+        } else {
+            // if sequelize found an user, we will return a Promise
+            // to match the same return type as above
+            // so we can handle it below
+            return Promise.resolve(user);
+        }
+    })
+    .then(user => {
+        // now everything must work just fine
+        // and we can start our application
         app.listen(3000);
     })
     .catch(err => {
