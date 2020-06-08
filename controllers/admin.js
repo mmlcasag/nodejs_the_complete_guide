@@ -39,8 +39,7 @@ module.exports.postAddProduct = (req, res, next) => {
         description: description
     })
         .then(result => {
-            // console.log(result);
-            console.log('Product created!');
+            res.redirect('/admin/products');
         })
         .catch(err => {
             console.log(err);
@@ -72,13 +71,26 @@ module.exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     
-    const product = new Product(id, title, author, image, price, description);
-    
-    product.update()
-        .then(() => {
+    Product.findByPk(id)
+        .then(product => {
+            // this won't automatically change the data in the database
+            product.title = title;
+            product.author = author;
+            product.image = image;
+            product.price = price;
+            product.description = description;
+            // in order to do that we must run
+            // remember that save() also returns a .then() and a catch()
+            // in order not to nest many .then() and catch()
+            // i am going to return this so I can handle it beneath
+            return product.save();
+        })
+        .then(result => {
+            // this will handle successfull responses from the save() method
             res.redirect('/admin/products');
         })
         .catch(err => {
+            // this catch() will handle eventual errors for both findByPk() and save() methods
             console.log(err);
         });
 };
