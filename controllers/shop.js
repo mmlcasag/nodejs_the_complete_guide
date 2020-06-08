@@ -30,13 +30,18 @@ module.exports.getProducts = (req, res, next) => {
 }
 
 module.exports.getProductDetails = (req, res, next) => {
-    Product.loadById(req.params.id, product => {
-        res.render('shop/product-detail', {
-            pageTitle: product.title,
-            path: '/products',
-            product: product
+    const id = req.params.id;
+    Product.loadById(id)
+        .then(([product]) => {
+            res.render('shop/product-detail', {
+                pageTitle: product.title,
+                path: '/products',
+                product: product[0]
+            });
+        })
+        .catch((err) => {
+            console.log(err);
         });
-    });
 }
 
 module.exports.getCart = (req, res, next) => {
@@ -51,18 +56,26 @@ module.exports.getCart = (req, res, next) => {
 
 module.exports.postAddToCart = (req, res, next) => {
     const id = req.body.id;
-    Product.loadById(id, product => {
-        Cart.add(product);
-        res.redirect('/cart');
-    });
+    Product.loadById(id)
+        .then(([product]) => {
+            Cart.add(product[0]);
+            res.redirect('/cart');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 
 module.exports.postDeleteFromCart = (req, res, next) => {
     const id = req.body.id;
-    Product.loadById(id, product => {
-        Cart.remove(product);
-        res.redirect('/cart');
-    });
+    Product.loadById(id)
+        .then(([product]) => {
+            Cart.remove(product[0]);
+            res.redirect('/cart');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 
 module.exports.getCheckout = (req, res, next) => {

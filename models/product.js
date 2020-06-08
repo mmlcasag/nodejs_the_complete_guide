@@ -12,20 +12,26 @@ module.exports = class Product {
         this.description = description;
     }
 
-    save() {
+    insert() {
         const query = ' INSERT INTO products ( title, author, image, price, description ) VALUES ( ?, ?, ?, ?, ? ) ';
         const binds = [ this.title, this.author, this.image, this.price, this.description ];
         return database.execute(query, binds);
     }
 
-    static remove(product) {
+    update() {
+        const query = ' UPDATE products SET title = ?, author = ?, image = ?, price = ?, description = ? WHERE id = ? ';
+        const binds = [ this.title, this.author, this.image, this.price, this.description, this.id ];
+        return database.execute(query, binds);
+    }
+
+    static delete(product) {
         const query = ' DELETE FROM products WHERE id = ? ';
         const binds = [ product.id ];
         return database.execute(query, binds);
     }
 
     static loadById(id) {
-        const query = ' SELECT * FROM products WHERE id = ? ';
+        const query = ' SELECT * FROM products WHERE products.id = ? ';
         const binds = [ id ];
         return database.execute(query, binds);
     }

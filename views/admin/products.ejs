@@ -17,7 +17,7 @@
             <% for (let product of products) { %>
                 <tr>
                     <td align="center"><img src="<%= product.image %>" alt="<%= product.title %>" height="75px"></td>
-                    <td align="left"><%= product.title %></td>
+                    <td align="left"><a href="/product/<%= product.id %>"><%= product.title %></a></td>
                     <td align="left"><%= product.author %></td>
                     <td align="right">$<%= product.price %></td>
                     <td align="center">

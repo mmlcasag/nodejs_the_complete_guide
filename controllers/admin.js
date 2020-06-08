@@ -33,7 +33,7 @@ module.exports.postAddProduct = (req, res, next) => {
     
     const product = new Product(null, title, author, image, price, description);
     
-    product.save()
+    product.insert()
         .then(() => {
             res.redirect('/admin/products');
         })
@@ -45,14 +45,18 @@ module.exports.postAddProduct = (req, res, next) => {
 module.exports.getEditProduct = (req, res, next) => {
     const id = req.params.id;
     const editing = req.query.editing;
-    Product.loadById(id, product => {
-        res.render('admin/edit-product', {
-            pageTitle: 'Edit Product',
-            path: '/admin/products',
-            product: product,
-            editing: (editing === 'true')
+    Product.loadById(id)
+        .then(([product]) => {
+            res.render('admin/edit-product', {
+                pageTitle: 'Edit Product',
+                path: '/admin/products',
+                product: product[0],
+                editing: (editing === 'true')
+            });
+        })
+        .catch((err) => {
+            console.log(err);
         });
-    });
 };
 
 module.exports.postEditProduct = (req, res, next) => {
@@ -65,7 +69,7 @@ module.exports.postEditProduct = (req, res, next) => {
     
     const product = new Product(id, title, author, image, price, description);
     
-    product.save()
+    product.update()
         .then(() => {
             res.redirect('/admin/products');
         })
@@ -76,8 +80,12 @@ module.exports.postEditProduct = (req, res, next) => {
 
 module.exports.postDeleteProduct = (req, res, next) => {
     const id = req.body.id;
-    Product.loadById(id, product => {
-        Product.remove(product);
-        res.redirect('/admin/products');
-    });  
+    Product.loadById(id)
+        .then(([product]) => {
+            Product.delete(product[0]);
+            res.redirect('/admin/products');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
