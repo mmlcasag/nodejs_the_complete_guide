@@ -44,6 +44,10 @@ app.use((req, res, next) => {
         })
 });
 
+// from now on, all new products that are created should be
+// associated to the currently logged in user
+// for now, this will only be this dummy user we created manually
+// so let's adjust our admin.js controller on the postAddProduct
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(errorRoutes);

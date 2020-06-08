@@ -31,13 +31,28 @@ module.exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     
-    Product.create({
-        title: title,
-        author: author,
-        image: image,
-        price: price,
-        description: description
-    })
+    // we could do this:
+    // userId: req.user.id
+    // and it would work
+    // but there's a more elegant way to do this
+    // remember, req.user is a sequelized object
+    // so it has many extented features
+    // and since we defined our relationship between models
+    // sequelize creates new features for us
+    // for example, we told sequelize that a user has many products
+    // so sequelize created a createProduct() for us:
+    // so now we can just pass the object with the values of the product
+    // and sequelize will automatically associate this new product with the user
+
+    // we call this magic association methods
+    req.user
+        .createProduct({
+            title: title,
+            author: author,
+            image: image,
+            price: price,
+            description: description
+        })
         .then(result => {
             res.redirect('/admin/products');
         })
