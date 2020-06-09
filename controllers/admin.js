@@ -1,7 +1,10 @@
 const Product = require('../models/product');
 
 module.exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    // what if we want to display only the products
+    // created by current logged in user?
+    // we can do this by changing this method to:
+    req.user.getProducts()
         .then(products => {
             res.render('admin/products', {
                 pageTitle: 'Admin Products',
@@ -64,12 +67,16 @@ module.exports.postAddProduct = (req, res, next) => {
 module.exports.getEditProduct = (req, res, next) => {
     const id = req.params.id;
     const editing = req.query.editing;
-    Product.findByPk(id)
-        .then(product => {
+    
+    // bear in mind that findByPk returns an object
+    // getProducts returns an array of objects
+    // therefore you must change from product to products when handling the Promise
+    req.user.getProducts({ where: { id: id } })
+        .then(products => {
             res.render('admin/edit-product', {
                 pageTitle: 'Edit Product',
                 path: '/admin/products',
-                product: product,
+                product: products[0],
                 editing: (editing === 'true')
             });
         })
