@@ -14,11 +14,9 @@ const root = require('./utils/root');
 // and now let's import it into our application
 const mongoConnect = require('./utils/database');
 
-/*
 const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-const errorRoutes = require('./routes/error');
-*/
+//const shopRoutes = require('./routes/shop');
+//const errorRoutes = require('./routes/error');
 
 const app = express();
 
@@ -28,11 +26,9 @@ app.set('views', 'views');
 app.use(express.static(path.join(root, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-/*
 app.use('/admin', adminRoutes);
-app.use(shopRoutes);
-app.use(errorRoutes);
-*/
+//app.use(shopRoutes);
+//app.use(errorRoutes);
 
 // now in the end of the file we need to execute the function and handle the callback
 mongoConnect(client => {
