@@ -12,7 +12,7 @@ const path = require('path');
 const root = require('./utils/root');
 
 // and now let's import it into our application
-const mongoConnect = require('./utils/database');
+const database = require('./utils/database');
 
 const adminRoutes = require('./routes/admin');
 //const shopRoutes = require('./routes/shop');
@@ -30,11 +30,6 @@ app.use('/admin', adminRoutes);
 //app.use(shopRoutes);
 //app.use(errorRoutes);
 
-// now in the end of the file we need to execute the function and handle the callback
-mongoConnect(client => {
-    // let's console.log the client argument
-    // to see what information it holds
-    console.log(client);
-    // and let's run our application
+database.connect(() => {
     app.listen(3000);
 });
