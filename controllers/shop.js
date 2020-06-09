@@ -109,12 +109,25 @@ module.exports.postAddToCart = (req, res, next) => {
 
 module.exports.postDeleteFromCart = (req, res, next) => {
     const id = req.body.id;
-    Product.findByPk(id)
-        .then(product => {
-            Cart.remove(product);
+    // retrieves the cart for the currently logged in user
+    req.user.getCart()
+        .then(cart => {
+            // retrieves the product by the id passed as an argument
+            return cart.getProducts({ where: { id: id } });
+        })
+        .then(products => {
+            // since we searched by the id
+            // we can retrieve just the first element of the array
+            const product = products[0];
+            // we can do this to delete from the in-between table
+            // remember: we don't want to delete the product
+            // just remove it from the cartItem table!
+            return product.cartItem.destroy();
+        })
+        .then(result => {
             res.redirect('/cart');
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
         });
 }
