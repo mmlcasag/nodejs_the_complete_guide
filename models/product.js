@@ -13,13 +13,15 @@ class Product {
         return database
             .getConnection()
             .collection('products')
-            .insertOne(this)
-            .then(result => {
-                console.log(result);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+            .insertOne(this);
+    }
+
+    static fetchAll() {
+        return database
+            .getConnection()
+            .collection('products')
+            .find() // returns a cursor
+            .toArray(); // you should only use this if you know it will return few records
     }
 }
 

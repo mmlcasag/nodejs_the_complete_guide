@@ -1,18 +1,18 @@
 const mongodb = require('mongodb');
+
 const MongoClient = mongodb.MongoClient;
 
 let _db;
 
 const connect = (callback) => {
-    MongoClient.connect('mongodb+srv://admin:admin@mmlcasag-cvtew.mongodb.net/shop?retryWrites=true&w=majority')
-    .then(client => {
-        _db = client.db();
-        callback(client);
-    })
-    .catch(err => {
-        console.log(err);
-        throw err;
-    });
+    MongoClient.connect('mongodb+srv://admin:admin@mmlcasag-cvtew.mongodb.net/shop?retryWrites=true&w=majority', { useUnifiedTopology: true })
+        .then(client => {
+            _db = client.db();
+            callback();
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }
 
 const getConnection = () => {

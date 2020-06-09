@@ -1,7 +1,7 @@
 const Product = require('../models/product');
 
 module.exports.getHome = (req, res, next) => {
-    Product.findAll()
+    Product.fetchAll()
         .then(products => {
             res.render('shop/home', {
                 pageTitle: 'Home',
@@ -15,7 +15,7 @@ module.exports.getHome = (req, res, next) => {
 }
 
 module.exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    Product.fetchAll()
         .then(products => {
             res.render('shop/products', {
                 pageTitle: 'Products',
@@ -28,6 +28,7 @@ module.exports.getProducts = (req, res, next) => {
         });
 }
 
+/*
 module.exports.getProductDetails = (req, res, next) => {
     const id = req.params.id;
     Product.findByPk(id)
@@ -181,3 +182,4 @@ module.exports.getOrders = (req, res, next) => {
             console.log(err);
         });
 }
+*/
