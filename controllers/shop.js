@@ -132,8 +132,10 @@ module.exports.postDeleteFromCart = (req, res, next) => {
 }
 
 module.exports.postCreateOrder = (req, res, next) => {
+    let userCart;
     req.user.getCart()
         .then(cart => {
+            userCart = cart;
             return cart.getProducts();
         })
         .then(products => {
@@ -147,6 +149,9 @@ module.exports.postCreateOrder = (req, res, next) => {
                 .catch(err => {
                     console.log(err);
                 });
+        })
+        .then(result => {
+            return userCart.setProducts(null);
         })
         .then(result => {
             res.redirect('/orders');
@@ -164,8 +169,15 @@ module.exports.getCheckout = (req, res, next) => {
 }
 
 module.exports.getOrders = (req, res, next) => {
-    res.render('shop/orders', {
-        pageTitle: 'Orders',
-        path: '/orders'
-    });
+    req.user.getOrders({include: ['products']})
+        .then(orders => {
+            res.render('shop/orders', {
+                pageTitle: 'Orders',
+                path: '/orders',
+                orders: orders
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }

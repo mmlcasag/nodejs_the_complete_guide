@@ -1,4 +1,17 @@
 <%- include('../includes/head.ejs') %>
 <%- include('../includes/navigation.ejs') %>
-    <p>No orders yet</p>
+    <% if (orders.length > 0) { %>
+        <ul>
+            <% orders.forEach( order => { %>
+                <li><h1>Order #<%= order.id %></h1></li>
+                <ul>
+                    <% order.products.forEach( product => { %>
+                        <li><h3><%= product.id %> - <%= product.title %> - <%= product.orderItem.qty %> - <%= product.price %></h3></li>
+                    <% }); %>
+                </ul>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No orders yet</p>
+    <% } %>
 <%- include('../includes/end.ejs') %>
