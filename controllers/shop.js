@@ -50,11 +50,14 @@ module.exports.getCart = (req, res, next) => {
             return cart.getProducts()
         })
         .then(products => {
+            /*
             res.render('shop/cart', {
                 pageTitle: 'Cart',
                 path: '/cart',
                 cart: products
             });
+            */
+           console.log(products);
         })
         .catch(err => {
             console.log(err);
@@ -62,10 +65,41 @@ module.exports.getCart = (req, res, next) => {
 }
 
 module.exports.postAddToCart = (req, res, next) => {
+    let fetchedCart;
     const id = req.body.id;
-    Product.findByPk(id)
-        .then(product => {
-            Cart.add(product);
+    
+    // retrieves the cart for the currently logged in user
+    req.user.getCart()
+        .then(cart => {
+            // save this reference for the cart to use it later
+            fetchedCart = cart;
+            // checks if there is already a product with the same id as the one being added
+            return cart.getProducts({ where: { id: id } });
+        })
+        .then(products => {
+            let product;
+            // if there is a product, then updates the reference here
+            if (products.length > 0) {
+                product = products[0];
+            }
+            // if the product is already in the cart
+            if (product) {
+                // ...
+            // if the product is not already in the cart
+            } else {
+                // retrieves it from the database
+                return Product.findByPk(id)
+                    .then(product => {
+                        // then inserts it in the cart
+                        // also specifying the qty 1 on the through table (CartItems)
+                        return fetchedCart.addProduct(product, { through: { qty: 1 } });
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+        })
+        .then(cart => {
             res.redirect('/cart');
         })
         .catch(err => {
