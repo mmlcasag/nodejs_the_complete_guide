@@ -1,5 +1,6 @@
 const Product = require('../models/product');
 
+/*
 module.exports.getProducts = (req, res, next) => {
     req.user.getProducts()
         .then(products => {
@@ -13,6 +14,7 @@ module.exports.getProducts = (req, res, next) => {
             console.log(err);
         });
 };
+*/
 
 module.exports.getAddProduct = (req, res, next) => {
     const editing = req.query.editing;
@@ -31,14 +33,8 @@ module.exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     
-    req.user
-        .createProduct({
-            title: title,
-            author: author,
-            image: image,
-            price: price,
-            description: description
-        })
+    const product = new Product(title, author, image, price, description);
+    product.save()
         .then(result => {
             res.redirect('/admin/products');
         })
@@ -47,6 +43,7 @@ module.exports.postAddProduct = (req, res, next) => {
         });
 };
 
+/*
 module.exports.getEditProduct = (req, res, next) => {
     const id = req.params.id;
     const editing = req.query.editing;
@@ -103,3 +100,4 @@ module.exports.postDeleteProduct = (req, res, next) => {
             console.log(err);
         });
 };
+*/

@@ -10,7 +10,7 @@ class Product {
     }
 
     save() {
-        database
+        return database
             .getConnection()
             .collection('products')
             .insertOne(this)
