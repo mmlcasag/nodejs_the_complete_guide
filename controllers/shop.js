@@ -45,13 +45,20 @@ module.exports.getProductDetails = (req, res, next) => {
 }
 
 module.exports.getCart = (req, res, next) => {
-    Cart.fetchAll(cart => {
-        res.render('shop/cart', {
-            pageTitle: 'Cart',
-            path: '/cart',
-            cart: cart
+    req.user.getCart()
+        .then(cart => {
+            return cart.getProducts()
+        })
+        .then(products => {
+            res.render('shop/cart', {
+                pageTitle: 'Cart',
+                path: '/cart',
+                cart: products
+            });
+        })
+        .catch(err => {
+            console.log(err);
         });
-    });
 }
 
 module.exports.postAddToCart = (req, res, next) => {
