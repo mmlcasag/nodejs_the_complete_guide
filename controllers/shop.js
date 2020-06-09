@@ -1,4 +1,3 @@
-const Cart = require('../models/cart');
 const Product = require('../models/product');
 
 module.exports.getHome = (req, res, next) => {
@@ -126,6 +125,31 @@ module.exports.postDeleteFromCart = (req, res, next) => {
         })
         .then(result => {
             res.redirect('/cart');
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+module.exports.postCreateOrder = (req, res, next) => {
+    req.user.getCart()
+        .then(cart => {
+            return cart.getProducts();
+        })
+        .then(products => {
+            return req.user.createOrder()
+                .then(order => {
+                    return order.addProducts(products.map(product => {
+                        product.orderItem = { qty: product.cartItem.qty };
+                        return product;
+                    }));
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        })
+        .then(result => {
+            res.redirect('/orders');
         })
         .catch(err => {
             console.log(err);

@@ -16,9 +16,11 @@
                 <tr>
                     <td align="left" width="75px"><img src="<%= product.image %>" alt="<%= product.title %>" height="75px"></td>
                     <td align="left">
-                        <b><%= product.title %></b>
-                        <br>
-                        <sub>by <%= product.author %></sub>
+                        <a href="/product/<%= product.id %>">
+                            <b><%= product.title %></b>
+                            <br>
+                            <sub>by <%= product.author %></sub>
+                        </a>
                     </td>
                     <td align="right"><%= product.cartItem.qty %></td>
                     <td align="right">$<%= product.price %></td>
@@ -33,6 +35,12 @@
             <% } %>
             </tbody>
         </table>
+        <br>
+        <div class="centered">
+            <form action="/create-order" method="post">
+                <button class="btn" type="submit">Order Now!</button>
+            </form>
+        </div>
     <% } else { %>
         <p>Cart is empty</p>
     <% } %>

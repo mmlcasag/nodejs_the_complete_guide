@@ -1,8 +1,6 @@
 <%- include('../includes/head.ejs') %>
 <%- include('../includes/navigation.ejs') %>
     <% if (products.length > 0) { %>
-        <a class="btn" href="/admin/add-product">Add Product</a>
-        <br><br>
         <table border="0" width="100%">
             <thead>
                 <tr>
@@ -31,6 +29,10 @@
             <% } %>
             </tbody>
         </table>
+        <br>
+        <div class="centered">
+            <a class="btn" href="/admin/add-product">Add Product</a>
+        </div>
     <% } else { %>
         <p>No products to display</p>
         <br><br>
