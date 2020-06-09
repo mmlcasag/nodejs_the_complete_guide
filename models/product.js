@@ -10,38 +10,17 @@ class Product {
     }
 
     save() {
-        database.getConnection();
+        database
+            .getConnection()
+            .collection('products')
+            .insertOne(this)
+            .then(result => {
+                console.log(result);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 }
-
-const Product = sequelize.define('product', {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true
-    },
-    title: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    author: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    image: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    price: {
-        type: Sequelize.DOUBLE,
-        allowNull: false,
-        defaultValue: 0
-    },
-    description: {
-        type: Sequelize.TEXT,
-        allowNull: true
-    }
-});
 
 module.exports = Product;
