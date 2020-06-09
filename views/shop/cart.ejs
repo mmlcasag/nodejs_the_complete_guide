@@ -1,6 +1,6 @@
 <%- include('../includes/head.ejs') %>
 <%- include('../includes/navigation.ejs') %>
-    <% if (cart.products.length > 0) { %>
+    <% if (products.length > 0) { %>
         <table border="0" width="100%">
             <thead>
                 <tr>
@@ -12,29 +12,25 @@
                 </tr>
             </thead>
             <tbody>
-            <% for (let itemcart of cart.products) { %>
+            <% for (let product of products) { %>
                 <tr>
-                    <td align="left" width="75px"><img src="<%= itemcart.product.image %>" alt="<%= itemcart.product.title %>" height="75px"></td>
+                    <td align="left" width="75px"><img src="<%= product.image %>" alt="<%= product.title %>" height="75px"></td>
                     <td align="left">
-                        <b><%= itemcart.product.title %></b>
+                        <b><%= product.title %></b>
                         <br>
-                        <sub>by <%= itemcart.product.author %></sub>
+                        <sub>by <%= product.author %></sub>
                     </td>
-                    <td align="right"><%= itemcart.qty %></td>
-                    <td align="right">$<%= itemcart.product.price %></td>
-                    <td align="right">$<%= itemcart.product.price * itemcart.qty %></td>
+                    <td align="right"><%= product.cartItem.qty %></td>
+                    <td align="right">$<%= product.price %></td>
+                    <td align="right">$<%= product.price * product.cartItem.qty %></td>
                     <td align="center">
                         <form action="/delete-from-cart" method="post">
-                            <input type="hidden" name="id" value="<%= itemcart.id %>">
+                            <input type="hidden" name="id" value="<%= product.id %>">
                             <button class="btn" type="submit">Delete</button>
                         </form>
                     </td>
                 </tr>
             <% } %>
-            <tr>
-                <th colspan="4" align="right">Total</th>
-                <th align="right">$<%= cart.totalPrice %></th>
-            </tr>
             </tbody>
         </table>
     <% } else { %>
