@@ -48,6 +48,22 @@ class User {
             );
     }
 
+    deleteFromCart(product) {
+        const updatedCartItems = this.cart.items.filter(prod => prod.productId.toString() !== product._id.toString());
+        
+        const updatedCart = {
+            items: updatedCartItems
+        };
+        
+        return database
+            .getConnection()
+            .collection('users')
+            .updateOne(
+                { _id: new mongodb.ObjectId(this._id) }, 
+                { $set: { cart: updatedCart } }
+            );
+    }
+
     getCart() {
         // this.cart.items returns an object like this
         // { productId: new mongodb.ObjectId(product._id), quantity: 1 }
@@ -73,7 +89,7 @@ class User {
                 console.log(err);
             })
     }
-    
+
     static fetchAll() {
         return database
             .getConnection()
