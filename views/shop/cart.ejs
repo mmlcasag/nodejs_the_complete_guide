@@ -5,7 +5,7 @@
             <thead>
                 <tr>
                     <th align="left" colspan="2">Product</th>
-                    <th align="right" width="100px">Qty</th>
+                    <th align="right" width="100px">Quantity</th>
                     <th align="right" width="100px">Price</th>
                     <th align="right" width="100px">Subtotal</th>
                     <th align="center" width="25%">Actions</th>
@@ -16,18 +16,18 @@
                 <tr>
                     <td align="left" width="75px"><img src="<%= product.image %>" alt="<%= product.title %>" height="75px"></td>
                     <td align="left">
-                        <a href="/product/<%= product.id %>">
+                        <a href="/product/<%= product._id %>">
                             <b><%= product.title %></b>
                             <br>
                             <sub>by <%= product.author %></sub>
                         </a>
                     </td>
-                    <td align="right"><%= product.cartItem.qty %></td>
+                    <td align="right"><%= product.quantity %></td>
                     <td align="right">$<%= product.price %></td>
-                    <td align="right">$<%= product.price * product.cartItem.qty %></td>
+                    <td align="right">$<%= product.price * product.quantity %></td>
                     <td align="center">
                         <form action="/delete-from-cart" method="post">
-                            <input type="hidden" name="id" value="<%= product.id %>">
+                            <input type="hidden" name="id" value="<%= product._id %>">
                             <button class="btn" type="submit">Delete</button>
                         </form>
                     </td>

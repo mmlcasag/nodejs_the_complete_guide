@@ -43,12 +43,8 @@ module.exports.getProductDetails = (req, res, next) => {
         });
 }
 
-/*
 module.exports.getCart = (req, res, next) => {
     req.user.getCart()
-        .then(cart => {
-            return cart.getProducts()
-        })
         .then(products => {
             res.render('shop/cart', {
                 pageTitle: 'Cart',
@@ -60,7 +56,6 @@ module.exports.getCart = (req, res, next) => {
             console.log(err);
         });
 }
-*/
 
 module.exports.postAddToCart = (req, res, next) => {
     const id = req.body.id;
@@ -70,6 +65,7 @@ module.exports.postAddToCart = (req, res, next) => {
             return req.user.addToCart(product);
         })
         .then(result => {
+            res.redirect('/cart');
         })
         .catch(err => {
             console.log(err);

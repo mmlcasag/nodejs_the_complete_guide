@@ -48,6 +48,32 @@ class User {
             );
     }
 
+    getCart() {
+        // this.cart.items returns an object like this
+        // { productId: new mongodb.ObjectId(product._id), quantity: 1 }
+        // we just want the productId, so let's remove the quantity
+        const productIds = this.cart.items.map(item => {
+            return item.productId;
+        });
+        // so now we have an array with only the ids of the products we have in the our cart
+        // so now we can query them like that:
+        return database
+            .getConnection()
+            .collection('products')
+            .find({ _id: { $in: productIds } })
+            .toArray()
+            .then(products => {
+                return products.map(p => {
+                    // returns an object with all the properties of the product model
+                    // plus the quantity
+                    return {...p, quantity: this.cart.items.find(i => i.productId.toString() === p._id.toString()).quantity }
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+    
     static fetchAll() {
         return database
             .getConnection()
