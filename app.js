@@ -21,8 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use((req, res, next) => {
     User.fetchOne('5ee05e3fcf560b7e128b79df')
         .then(user => {
-            req.user = user;
-            console.log(user);
+            req.user = new User(user.username, user.email, user.cart, user._id);
             next();
         })
         .catch(err => {

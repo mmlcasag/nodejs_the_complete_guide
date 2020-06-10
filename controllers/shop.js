@@ -60,53 +60,24 @@ module.exports.getCart = (req, res, next) => {
             console.log(err);
         });
 }
+*/
 
 module.exports.postAddToCart = (req, res, next) => {
-    let userCart;
-    let cartItemQty = 1;
     const id = req.body.id;
-    
-    // retrieves the cart for the currently logged in user
-    req.user.getCart()
-        .then(cart => {
-            // save this reference for the cart to use it later
-            userCart = cart;
-            // checks if there is already a product with the same id as the one being added
-            return cart.getProducts({ where: { id: id } });
-        })
-        .then(products => {
-            let product;
-            // if there is a product, then updates the reference here
-            if (products.length > 0) {
-                product = products[0];
-            }
-            // if the product is already in the cart
-            if (product) {
-                // we can do that to access the value of the in-between table
-                // just like we did previously in the view
-                cartItemQty = product.cartItem.qty + 1;
-                // and we return the product to be handled later
-                return product;
-            // if the product is not already in the cart
-            } else {
-                // by default we always add 1 qty to the cart
-                cartItemQty = 1;
-                // retrieves the product from the database
-                return Product.findByPk(id);
-            }
-        })
+
+    Product.fetchOne(id)
         .then(product => {
-            // and now we add the product to the cart and the cartItemQty to the in-between table
-            return userCart.addProduct(product, { through: { qty: cartItemQty } });
+            return req.user.addToCart(product);
         })
-        .then(cart => {
-            res.redirect('/cart');
+        .then(result => {
+            console.log('A princípio era para ter funcionado!');
         })
         .catch(err => {
             console.log(err);
         });
 }
 
+/*
 module.exports.postDeleteFromCart = (req, res, next) => {
     const id = req.body.id;
     // retrieves the cart for the currently logged in user

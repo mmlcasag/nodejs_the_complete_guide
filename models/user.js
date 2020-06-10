@@ -7,9 +7,7 @@ class User {
         this.username = username;
         this.email = email;
         this.cart = cart; // { items: [ {...}, {...} ] }
-        if (id) {
-            this._id = new mongodb.ObjectId(id);
-        }
+        this._id = new mongodb.ObjectId(id);
     }
     
     save() {
@@ -27,18 +25,14 @@ class User {
     }
 
     addToCart(product) {
-        /*
-        const cartProduct = this.cart.items.findIndex(prod => prod._id === product._id);
-        if (cartProduct) {
-
-        } else {
-        */
-            const updatedCart = { items: [{...product, qty: 1}] };
-            return database
-                .getConnection()
-                .collection('users')
-                .updateOne({ _id: this.id }, { $set: { cart: updatedCart } });
-        //}
+        const updatedCart = { items: [{ productId: new mongodb.ObjectId(product._id), quantity: 1}] };
+        return database
+            .getConnection()
+            .collection('users')
+            .updateOne(
+                { _id: new mongodb.ObjectId(this._id) }, 
+                { $set: { cart: updatedCart } }
+            );
     }
 
     static fetchAll() {
