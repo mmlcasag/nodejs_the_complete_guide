@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const User = require('../models/user');
 
 module.exports.getProducts = (req, res, next) => {
     Product.fetchAll()
@@ -88,5 +89,51 @@ module.exports.postDeleteProduct = (req, res, next) => {
         })
         .catch(err => {
             console.log(err);
+        });
+};
+
+module.exports.getScriptInvalidProducts = (req, res, next) => {
+    // Objective
+    
+    // we need go loop through all the carts
+    // then look into all the products inside each of the carts
+    // and check if there is a document with the correspondent id in the products collection
+    // if there is, then this means the product is valid
+    // if there is not, then you have to remove this product from this cart
+    
+    // Fetch all the users
+    User.fetchAll()
+        .then(users => {
+            // for each user
+            users.forEach(user => {
+                const currentUser = new User(user.username, user.email, user.cart, user._id);
+                // for each item of each user
+                user.cart.items.forEach(item => {
+                    // check if you can fetch the product in the products collection
+                    Product.fetchOne(item.productId)
+                        .then(product => {
+                            // if the product is valid, there is nothing you should do
+                            console.log('Product._id ' + product._id + ' is valid');
+                        })
+                        .catch(err => {
+                            // if the product is valid, you must remove it from the cart
+                            console.log('Product._id ' + item.productId + ' is invalid');
+                            // remove the product from the cart
+                            currentUser.removeFromCart(item.productId)
+                                .then(result => {
+                                    console.log('Product._id ' + item.productId + ' removed from the cart._id ' + currentUser._id);
+                                })
+                                .catch(err => {
+                                    console.log('Error trying to delete invalid product: ' + err)
+                                });
+                        })
+                });
+            });
+        })
+        .then(result => {
+            res.send('OK');
+        })
+        .catch(err => {
+            res.send(err);
         });
 };

@@ -113,6 +113,22 @@ class User {
             );
     }
 
+    removeFromCart(id) {
+        const updatedCartItems = this.cart.items.filter(prod => prod.productId.toString() !== id.toString());
+        
+        const updatedCart = {
+            items: updatedCartItems
+        };
+        
+        return database
+            .getConnection()
+            .collection('users')
+            .updateOne(
+                { _id: new mongodb.ObjectId(this._id) }, 
+                { $set: { cart: updatedCart } }
+            );
+    }
+
     createOrder() {
         return this.getCart()
             .then(products => {
