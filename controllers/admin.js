@@ -68,15 +68,9 @@ module.exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     
-    Product.fetchOne(id)
-        .then(product => {
-            product.title = title;
-            product.author = author;
-            product.image = image;
-            product.price = price;
-            product.description = description;
-            return product.save();
-        })
+    const product = new Product(title, author, image, price, description, id);
+
+    product.save()
         .then(result => {
             res.redirect('/admin/products');
         })
