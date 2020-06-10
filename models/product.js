@@ -3,7 +3,7 @@ const mongodb = require('mongodb');
 const database = require('../utils/database');
 
 class Product {
-    constructor(title, author, image, price, description, id) {
+    constructor(title, author, image, price, description, id, userId) {
         this.title = title;
         this.author = author;
         this.image = image;
@@ -12,9 +12,14 @@ class Product {
         if (id) {
             this._id = new mongodb.ObjectId(id);
         }
+        if (userId) {
+            this.userId = userId; // new mongodb.ObjectId(userId);
+        }
     }
 
     save() {
+        // now when creating a product, 
+        // I want to store a user reference
         if (this._id) {
             return database
                 .getConnection()
