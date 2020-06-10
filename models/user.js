@@ -147,7 +147,7 @@ class User {
         return database
             .getConnection()
             .collection('orders')
-            .find()
+            .find({ 'user._id': this._id }) // when comparing for child properties, we need to place between quotes: 'user._id'
             .toArray();
     }
 
