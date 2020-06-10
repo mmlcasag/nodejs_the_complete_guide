@@ -70,7 +70,6 @@ module.exports.postAddToCart = (req, res, next) => {
             return req.user.addToCart(product);
         })
         .then(result => {
-            console.log('A princípio era para ter funcionado!');
         })
         .catch(err => {
             console.log(err);
