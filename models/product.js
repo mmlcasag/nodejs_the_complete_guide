@@ -11,13 +11,13 @@ class Product {
         this.description = description;
         this._id = new mongodb.ObjectId(id);
     }
-    
+
     save() {
         if (this._id) {
             return database
                 .getConnection()
                 .collection('products')
-                .updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
+                .updateOne({ _id: this._id }, { $set: this });
         } else {
             return database
                 .getConnection()
