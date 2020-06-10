@@ -38,8 +38,15 @@ class Product {
         return database
             .getConnection()
             .collection('products')
-            .find( { _id: new mongodb.ObjectId(id) } ) // we have to use the help of mongodb to search by ID's
+            .find({ _id: new mongodb.ObjectId(id) }) // we have to use the help of mongodb to search by ID's
             .next(); // returns the first element of the result (and the only one we need)
+    }
+
+    static deleteOne(id) {
+        return database
+            .getConnection()
+            .collection('products')
+            .deleteOne({ _id: new mongodb.ObjectId(id) });
     }
 }
 

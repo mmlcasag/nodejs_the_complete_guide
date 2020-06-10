@@ -79,13 +79,9 @@ module.exports.postEditProduct = (req, res, next) => {
         });
 };
 
-/*
 module.exports.postDeleteProduct = (req, res, next) => {
     const id = req.body.id;
-    Product.findByPk(id)
-        .then(product => {
-            return product.destroy();
-        })
+    Product.deleteOne(id)
         .then(result => {
             res.redirect('/admin/products');
         })
@@ -93,4 +89,3 @@ module.exports.postDeleteProduct = (req, res, next) => {
             console.log(err);
         });
 };
-*/
