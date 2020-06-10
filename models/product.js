@@ -3,19 +3,27 @@ const mongodb = require('mongodb');
 const database = require('../utils/database');
 
 class Product {
-    constructor(title, author, image, price, description) {
+    constructor(title, author, image, price, description, id) {
         this.title = title;
         this.author = author;
         this.image = image;
         this.price = price;
         this.description = description;
+        this._id = id;
     }
 
     save() {
-        return database
-            .getConnection()
-            .collection('products')
-            .insertOne(this);
+        if (this._id) {
+            return database
+                .getConnection()
+                .collection('products')
+                .updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
+        } else {
+            return database
+                .getConnection()
+                .collection('products')
+                .insertOne(this);
+        }
     }
 
     static fetchAll() {

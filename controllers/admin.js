@@ -60,7 +60,6 @@ module.exports.getEditProduct = (req, res, next) => {
         });
 };
 
-/*
 module.exports.postEditProduct = (req, res, next) => {
     const id = req.body.id;
     const title = req.body.title;
@@ -69,7 +68,7 @@ module.exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     
-    Product.findByPk(id)
+    Product.fetchOne(id)
         .then(product => {
             product.title = title;
             product.author = author;
@@ -86,6 +85,7 @@ module.exports.postEditProduct = (req, res, next) => {
         });
 };
 
+/*
 module.exports.postDeleteProduct = (req, res, next) => {
     const id = req.body.id;
     Product.findByPk(id)
