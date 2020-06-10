@@ -10,6 +10,29 @@ class User {
         this._id = new mongodb.ObjectId(id);
     }
     
+    static fetchAll() {
+        return database
+            .getConnection()
+            .collection('users')
+            .find()
+            .toArray();
+    }
+
+    static fetchOne(id) {
+        return database
+            .getConnection()
+            .collection('users')
+            .find({ _id: new mongodb.ObjectId(id) })
+            .next();
+    }
+
+    static deleteOne(id) {
+        return database
+            .getConnection()
+            .collection('users')
+            .deleteOne({ _id: new mongodb.ObjectId(id) });
+    }
+
     save() {
         if (this.id) {
             return database
@@ -22,6 +45,32 @@ class User {
                 .collection('users')
                 .insertOne(this);
         }
+    }
+
+    getCart() {
+        // this.cart.items returns an object like this
+        // { productId: new mongodb.ObjectId(product._id), quantity: 1 }
+        // we just want the productId, so let's remove the quantity
+        const productIds = this.cart.items.map(item => {
+            return item.productId;
+        });
+        // so now we have an array with only the ids of the products we have in the our cart
+        // so now we can query them like that:
+        return database
+            .getConnection()
+            .collection('products')
+            .find({ _id: { $in: productIds } })
+            .toArray()
+            .then(products => {
+                return products.map(p => {
+                    // returns an object with all the properties of the product model
+                    // plus the quantity
+                    return {...p, quantity: this.cart.items.find(i => i.productId.toString() === p._id.toString()).quantity }
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     addToCart(product) {
@@ -64,54 +113,25 @@ class User {
             );
     }
 
-    getCart() {
-        // this.cart.items returns an object like this
-        // { productId: new mongodb.ObjectId(product._id), quantity: 1 }
-        // we just want the productId, so let's remove the quantity
-        const productIds = this.cart.items.map(item => {
-            return item.productId;
-        });
-        // so now we have an array with only the ids of the products we have in the our cart
-        // so now we can query them like that:
+    createOrder() {
         return database
             .getConnection()
-            .collection('products')
-            .find({ _id: { $in: productIds } })
-            .toArray()
-            .then(products => {
-                return products.map(p => {
-                    // returns an object with all the properties of the product model
-                    // plus the quantity
-                    return {...p, quantity: this.cart.items.find(i => i.productId.toString() === p._id.toString()).quantity }
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            })
+            .collection('orders')
+            .insertOne(this.cart)
+            .then(result => {
+                // empties the cart
+                this.cart = { items: [] };
+                // and updates in the database
+                return database
+                    .getConnection()
+                    .collection('users')
+                    .updateOne(
+                        { _id: new mongodb.ObjectId(this._id) }, 
+                        { $set: { cart: { items: [] } } }
+                    );
+            });
     }
 
-    static fetchAll() {
-        return database
-            .getConnection()
-            .collection('users')
-            .find()
-            .toArray();
-    }
-
-    static fetchOne(id) {
-        return database
-            .getConnection()
-            .collection('users')
-            .find({ _id: new mongodb.ObjectId(id) })
-            .next();
-    }
-
-    static deleteOne(id) {
-        return database
-            .getConnection()
-            .collection('users')
-            .deleteOne({ _id: new mongodb.ObjectId(id) });
-    }
 }
 
 module.exports = User;
