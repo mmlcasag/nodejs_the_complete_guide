@@ -104,7 +104,6 @@ module.exports.postCreateOrder = (req, res, next) => {
         });
 }
 
-/*
 module.exports.getOrders = (req, res, next) => {
     req.user.getOrders({include: ['products']})
         .then(orders => {
@@ -118,4 +117,3 @@ module.exports.getOrders = (req, res, next) => {
             console.log(err);
         });
 }
-*/

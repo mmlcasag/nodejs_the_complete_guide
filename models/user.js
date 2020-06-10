@@ -114,10 +114,21 @@ class User {
     }
 
     createOrder() {
-        return database
-            .getConnection()
-            .collection('orders')
-            .insertOne(this.cart)
+        return this.getCart()
+            .then(products => {
+                const order = {
+                    items: products,
+                    user: {
+                        _id: this._id,
+                        username: this.username,
+                        email: this.email
+                    }
+                };
+                return database
+                    .getConnection()
+                    .collection('orders')
+                    .insertOne(order);
+            })
             .then(result => {
                 // empties the cart
                 this.cart = { items: [] };
@@ -130,6 +141,14 @@ class User {
                         { $set: { cart: { items: [] } } }
                     );
             });
+    }
+
+    getOrders() {
+        return database
+            .getConnection()
+            .collection('orders')
+            .find()
+            .toArray();
     }
 
 }
