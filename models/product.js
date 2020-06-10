@@ -9,7 +9,9 @@ class Product {
         this.image = image;
         this.price = price;
         this.description = description;
-        this._id = new mongodb.ObjectId(id);
+        if (id) {
+            this._id = new mongodb.ObjectId(id);
+        }
     }
 
     save() {
