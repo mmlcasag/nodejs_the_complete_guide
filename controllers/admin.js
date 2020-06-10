@@ -42,17 +42,16 @@ module.exports.postAddProduct = (req, res, next) => {
         });
 };
 
-/*
 module.exports.getEditProduct = (req, res, next) => {
     const id = req.params.id;
     const editing = req.query.editing;
     
-    req.user.getProducts({ where: { id: id } })
-        .then(products => {
+    Product.fetchOne(id)
+        .then(product => {
             res.render('admin/edit-product', {
                 pageTitle: 'Edit Product',
                 path: '/admin/products',
-                product: products[0],
+                product: product,
                 editing: (editing === 'true')
             });
         })
@@ -61,6 +60,7 @@ module.exports.getEditProduct = (req, res, next) => {
         });
 };
 
+/*
 module.exports.postEditProduct = (req, res, next) => {
     const id = req.body.id;
     const title = req.body.title;
