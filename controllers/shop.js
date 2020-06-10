@@ -28,10 +28,9 @@ module.exports.getProducts = (req, res, next) => {
         });
 }
 
-/*
 module.exports.getProductDetails = (req, res, next) => {
     const id = req.params.id;
-    Product.findByPk(id)
+    Product.fetchOne(id)
         .then(product => {
             res.render('shop/product-detail', {
                 pageTitle: product.title,
@@ -44,6 +43,7 @@ module.exports.getProductDetails = (req, res, next) => {
         });
 }
 
+/*
 module.exports.getCart = (req, res, next) => {
     req.user.getCart()
         .then(cart => {

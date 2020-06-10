@@ -1,3 +1,5 @@
+const mongodb = require('mongodb');
+
 const database = require('../utils/database');
 
 class Product {
@@ -22,6 +24,14 @@ class Product {
             .collection('products')
             .find() // returns a cursor
             .toArray(); // you should only use this if you know it will return few records
+    }
+
+    static fetchOne(id) {
+        return database
+            .getConnection()
+            .collection('products')
+            .find( { _id: new mongodb.ObjectId(id) } ) // we have to use the help of mongodb to search by ID's
+            .next(); // returns the first element of the result (and the only one we need)
     }
 }
 
