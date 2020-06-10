@@ -3,9 +3,10 @@ const mongodb = require('mongodb');
 const database = require('../utils/database');
 
 class User {
-    constructor(username, email, id) {
+    constructor(username, email, cart, id) {
         this.username = username;
         this.email = email;
+        this.cart = cart; // { items: [ {...}, {...} ] }
         if (id) {
             this._id = new mongodb.ObjectId(id);
         }
@@ -16,13 +17,28 @@ class User {
             return database
                 .getConnection()
                 .collection('users')
-                .updateOne({ _id: this.id }, { $set:  this });
+                .updateOne({ _id: this.id }, { $set: this });
         } else {
             return database
                 .getConnection()
                 .collection('users')
                 .insertOne(this);
         }
+    }
+
+    addToCart(product) {
+        /*
+        const cartProduct = this.cart.items.findIndex(prod => prod._id === product._id);
+        if (cartProduct) {
+
+        } else {
+        */
+            const updatedCart = { items: [{...product, qty: 1}] };
+            return database
+                .getConnection()
+                .collection('users')
+                .updateOne({ _id: this.id }, { $set: { cart: updatedCart } });
+        //}
     }
 
     static fetchAll() {
