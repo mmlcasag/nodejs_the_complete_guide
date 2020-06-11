@@ -83,7 +83,7 @@ module.exports.postDeleteFromCart = (req, res, next) => {
     
     Product.findById(id)
         .then(product => {
-            return req.user.deleteFromCart(product);
+            return req.user.removeFromCart(product);
         })
         .then(result => {
             res.redirect('/cart');
