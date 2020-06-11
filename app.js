@@ -40,7 +40,7 @@ app.use(shopRoutes);
 app.use(errorRoutes);
 
 // ...and connect with the database!
-mongoose.connect('mongodb+srv://admin:admin@mmlcasag-cvtew.mongodb.net/shop?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://admin:admin@mmlcasag-cvtew.mongodb.net/mongoose?retryWrites=true&w=majority')
     .then(result => {
         app.listen(3000); 
     })
