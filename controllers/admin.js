@@ -31,9 +31,14 @@ module.exports.postAddProduct = (req, res, next) => {
     const image = req.body.image;
     const price = req.body.price;
     const description = req.body.description;
-    const userId = req.user._id;
     
-    const product = new Product(title, author, image, price, description, null, userId);
+    const product = new Product({
+        title: title,
+        author: author,
+        image: image,
+        price: price,
+        description: description
+    });
     
     product.save()
         .then(result => {

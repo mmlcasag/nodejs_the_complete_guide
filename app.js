@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 // just import it...
 const mongoose = require('mongoose');
 
-const User = require('./models/user');
+// const User = require('./models/user');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -24,6 +24,7 @@ app.set('views', 'views');
 app.use(express.static(path.join(root, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+/*
 app.use((req, res, next) => {
     User.fetchOne('5ee05e3fcf560b7e128b79df')
         .then(user => {
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
             console.log(err);
         });
 });
+*/
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
