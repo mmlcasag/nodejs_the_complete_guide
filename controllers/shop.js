@@ -46,16 +46,13 @@ module.exports.getProductDetails = (req, res, next) => {
 }
 
 module.exports.getCart = (req, res, next) => {
-    // get the current user
     req.user
-        // populate de productId with the Product object
         .populate('cart.items.productId')
         .execPopulate()
         .then(user => {
             res.render('shop/cart', {
                 pageTitle: 'Cart',
                 path: '/cart',
-                // pass the user.cart.items array as an argument to the view
                 products: user.cart.items
             });
         })
@@ -108,11 +105,6 @@ module.exports.postCreateOrder = (req, res, next) => {
         .then(user => {
             const products = user.cart.items.map(item => {
                 return { 
-                    // if i do just that
-                    // mongoose will save only the reference, only the id for the product
-                    // product: item.productId
-                    // if i want to save the entire object
-                    // i must do this:
                     product: { ...item.productId._doc },
                     quantity: item.quantity
                 };

@@ -14,10 +14,9 @@ const userSchema = new Schema({
         required: true
     },
     cart: {
-        // this is how we declare an array
         items: [{ 
             productId: { 
-                type: Schema.Types.ObjectId, // this how we make a reference to another schema
+                type: Schema.Types.ObjectId,
                 ref: 'Product',
                 required: true 
             },
