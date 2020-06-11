@@ -30,7 +30,8 @@ module.exports.getProducts = (req, res, next) => {
 
 module.exports.getProductDetails = (req, res, next) => {
     const id = req.params.id;
-    Product.fetchOne(id)
+
+    Product.findById(id)
         .then(product => {
             res.render('shop/product-detail', {
                 pageTitle: product.title,
@@ -60,7 +61,7 @@ module.exports.getCart = (req, res, next) => {
 module.exports.postAddToCart = (req, res, next) => {
     const id = req.body.id;
 
-    Product.fetchOne(id)
+    Product.findById(id)
         .then(product => {
             return req.user.addToCart(product);
         })
@@ -75,7 +76,7 @@ module.exports.postAddToCart = (req, res, next) => {
 module.exports.postDeleteFromCart = (req, res, next) => {
     const id = req.body.id;
     
-    Product.fetchOne(id)
+    Product.findById(id)
         .then(product => {
             return req.user.deleteFromCart(product);
         })
