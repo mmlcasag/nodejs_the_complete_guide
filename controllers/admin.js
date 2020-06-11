@@ -53,7 +53,7 @@ module.exports.getEditProduct = (req, res, next) => {
     const id = req.params.id;
     const editing = req.query.editing;
     
-    Product.fetchOne(id)
+    Product.findById(id)
         .then(product => {
             res.render('admin/edit-product', {
                 pageTitle: 'Edit Product',
@@ -75,9 +75,20 @@ module.exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     
-    const product = new Product(title, author, image, price, description, id);
+    Product.findById(id)
+        .then(product => {
+            // now you get from the return
+            // not just a json like a product
+            // but a full product class
+            // with all its mongoose methods available!
+            product.title = title;
+            product.author = author;
+            product.image = image;
+            product.price = price;
+            product.description = description;
 
-    product.save()
+            return product.save();
+        })
         .then(result => {
             res.redirect('/admin/products');
         })
