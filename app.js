@@ -1,8 +1,16 @@
+// MANAGING SESSIONS
+// to start managing sessions we will install another package
+// npm install express-session --save
+// now we need to initialize the session as soon as possible
+// so the app.js is probably the best place to place your code
+
 const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+// so let's import it
+const session = require('express-session');
 
 const User = require('./models/user');
 
@@ -20,6 +28,9 @@ app.set('views', 'views');
 
 app.use(express.static(path.join(root, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// so now we need to configure our session and register it in a middleware
+app.use(session({ secret: 'BARIPOAUJFGVPSF', resave: false, saveUninitialized: false }));
 
 app.use((req, res, next) => {
     User.findById('5ee23237956ed626eca64fca')
