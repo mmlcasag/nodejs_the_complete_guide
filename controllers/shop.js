@@ -108,7 +108,12 @@ module.exports.postCreateOrder = (req, res, next) => {
         .then(user => {
             const products = user.cart.items.map(item => {
                 return { 
-                    product: item.productId,
+                    // if i do just that
+                    // mongoose will save only the reference, only the id for the product
+                    // product: item.productId
+                    // if i want to save the entire object
+                    // i must do this:
+                    product: { ...item.productId._doc },
                     quantity: item.quantity
                 };
             });
