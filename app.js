@@ -37,7 +37,7 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(errorRoutes);
 
-mongoose.connect('mongodb+srv://admin:admin@mmlcasag-cvtew.mongodb.net/mongoose?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://admin:admin@mmlcasag-cvtew.mongodb.net/mongoose?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(result => {
         User.findOne()
             .then(user => {

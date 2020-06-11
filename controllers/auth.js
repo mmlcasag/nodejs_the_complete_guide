@@ -6,7 +6,12 @@ module.exports.getLogin = (req, res, next) => {
     // so let's pass this value as an argument to the view
     const isLoggedIn = cookies.split('=')[1];
     console.log(isLoggedIn);
+    // the problem is that the user can manipulate the cookie
+    // he can set it to false, or delete it altogether
+    // so this is not a good way to store this kind of information
+    // sessions would be better
 
+    // but let's learn a bit more about cookies first
     res.render('auth/login', {
         pageTitle: 'Login',
         path: '/auth/login',
