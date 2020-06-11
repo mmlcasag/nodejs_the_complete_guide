@@ -7,6 +7,7 @@ module.exports.getHome = (req, res, next) => {
             res.render('shop/home', {
                 pageTitle: 'Home',
                 path: '/',
+                isLoggedIn: req.isLoggedIn,
                 products: products
             });
         })
@@ -21,6 +22,7 @@ module.exports.getProducts = (req, res, next) => {
             res.render('shop/products', {
                 pageTitle: 'Products',
                 path: '/products',
+                isLoggedIn: req.isLoggedIn,
                 products: products
             });
         })
@@ -37,6 +39,7 @@ module.exports.getProductDetails = (req, res, next) => {
             res.render('shop/product-detail', {
                 pageTitle: product.title,
                 path: '/products',
+                isLoggedIn: req.isLoggedIn,
                 product: product
             });
         })
@@ -53,6 +56,7 @@ module.exports.getCart = (req, res, next) => {
             res.render('shop/cart', {
                 pageTitle: 'Cart',
                 path: '/cart',
+                isLoggedIn: req.isLoggedIn,
                 products: user.cart.items
             });
         })
@@ -94,7 +98,8 @@ module.exports.postDeleteFromCart = (req, res, next) => {
 module.exports.getCheckout = (req, res, next) => {
     res.render('shop/checkout', {
         pageTitle: 'Checkout',
-        path: '/checkout'
+        path: '/checkout',
+        isLoggedIn: req.isLoggedIn
     });
 }
 
@@ -138,6 +143,7 @@ module.exports.getOrders = (req, res, next) => {
             res.render('shop/orders', {
                 pageTitle: 'Orders',
                 path: '/orders',
+                isLoggedIn: req.isLoggedIn,
                 orders: orders
             });
         })

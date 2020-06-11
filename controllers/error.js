@@ -1,6 +1,7 @@
 module.exports.getErrorPage = (req, res, next) => {
     res.render('404', {
         pageTitle: 'Error',
-        path: '/error'
+        path: '/error',
+        isLoggedIn: req.isLoggedIn
     });
 }
