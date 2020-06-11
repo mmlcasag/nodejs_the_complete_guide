@@ -60,7 +60,7 @@ module.exports.getCart = (req, res, next) => {
 
 module.exports.postAddToCart = (req, res, next) => {
     const id = req.body.id;
-
+    
     Product.findById(id)
         .then(product => {
             return req.user.addToCart(product);
