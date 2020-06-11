@@ -22,6 +22,11 @@ const productSchema = new Schema({
     description: {
         type: String,
         required: false
+    },
+    userId: {
+        type: Schema.Types.ObjectId, // this could be any ObjectId of any object
+        ref: 'User', // here we specify which schema this ObjectId relates to
+        required: false
     }
 });
 

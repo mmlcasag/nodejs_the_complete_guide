@@ -16,6 +16,7 @@ const userSchema = new Schema({
         items: [{ 
             productId: { 
                 type: Schema.Types.ObjectId, // this how we make a reference to another schema
+                ref: 'Product',
                 required: true 
             },
             quantity: {

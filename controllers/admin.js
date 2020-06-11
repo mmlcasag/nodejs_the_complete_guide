@@ -37,7 +37,8 @@ module.exports.postAddProduct = (req, res, next) => {
         author: author,
         image: image,
         price: price,
-        description: description
+        description: description,
+        userId: req.user._id
     });
     
     product.save()
