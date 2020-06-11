@@ -1,3 +1,4 @@
+/*
 const mongodb = require('mongodb');
 
 const database = require('../utils/database');
@@ -58,3 +59,4 @@ class Product {
 }
 
 module.exports = Product;
+*/

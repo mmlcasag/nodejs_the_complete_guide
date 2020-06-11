@@ -1,3 +1,4 @@
+/*
 const mongodb = require('mongodb');
 
 const database = require('../utils/database');
@@ -170,3 +171,4 @@ class User {
 }
 
 module.exports = User;
+*/

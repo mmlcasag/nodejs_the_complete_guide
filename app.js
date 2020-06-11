@@ -1,14 +1,20 @@
+const path = require('path');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const path = require('path');
-const root = require('./utils/root');
+// mongoose configuration is really simple...
 
-const database = require('./utils/database');
+// just import it...
+const mongoose = require('mongoose');
+
 const User = require('./models/user');
+
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorRoutes = require('./routes/error');
+
+const root = require('./utils/root');
 
 const app = express();
 
@@ -33,6 +39,11 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(errorRoutes);
 
-database.connect(() => {
-    app.listen(3000);
-});
+// ...and connect with the database!
+mongoose.connect('mongodb+srv://admin:admin@mmlcasag-cvtew.mongodb.net/shop?retryWrites=true&w=majority')
+    .then(result => {
+        app.listen(3000); 
+    })
+    .catch(err => {
+        console.log(err);
+    });
