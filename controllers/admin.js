@@ -2,8 +2,21 @@ const Product = require('../models/product');
 const User = require('../models/user');
 
 module.exports.getProducts = (req, res, next) => {
+    // let's suppose we also want to fetch the entire user object populated
+    // remember the product schema has a user reference by the name of userId
+    // we could, of course, findById the user, return the object and etc.
+    // but mongoose provides a very nice functionality for this
     Product.find()
+        // this specifies which fields of the product object I want retrieved
+        .select('_id title author image price') 
+        // this tells mongoose to populate a certain field with all the 
+        // detail information and not just the id
+        // the second arguments means select * except of cart and __v
+        .populate('userId', '-cart -__v')
         .then(products => {
+            // if I now console.log this
+            // console.log(products);
+            // you can see that userId holds the full user objects!
             res.render('admin/products', {
                 pageTitle: 'Admin Products',
                 path: '/admin/products',
