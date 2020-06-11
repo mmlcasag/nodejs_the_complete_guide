@@ -141,7 +141,7 @@ module.exports.postCreateOrder = (req, res, next) => {
 }
 
 module.exports.getOrders = (req, res, next) => {
-    req.user.getOrders()
+    Order.find({ 'user._id': req.user._id })
         .then(orders => {
             res.render('shop/orders', {
                 pageTitle: 'Orders',
