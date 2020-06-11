@@ -45,12 +45,17 @@ module.exports.getProductDetails = (req, res, next) => {
 }
 
 module.exports.getCart = (req, res, next) => {
-    req.user.getCart()
-        .then(products => {
+    // get the current user
+    req.user
+        // populate de productId with the Product object
+        .populate('cart.items.productId')
+        .execPopulate()
+        .then(user => {
             res.render('shop/cart', {
                 pageTitle: 'Cart',
                 path: '/cart',
-                products: products
+                // pass the user.cart.items array as an argument to the view
+                products: user.cart.items
             });
         })
         .catch(err => {
@@ -60,7 +65,7 @@ module.exports.getCart = (req, res, next) => {
 
 module.exports.postAddToCart = (req, res, next) => {
     const id = req.body.id;
-    
+
     Product.findById(id)
         .then(product => {
             return req.user.addToCart(product);

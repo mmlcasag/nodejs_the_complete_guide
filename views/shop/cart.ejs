@@ -15,20 +15,20 @@
             <tbody>
             <% for (let product of products) { %>
                 <tr>
-                    <td align="left" width="75px"><img src="<%= product.image %>" alt="<%= product.title %>" height="75px"></td>
+                    <td align="left" width="75px"><img src="<%= product.productId.image %>" alt="<%= product.productId.title %>" height="75px"></td>
                     <td align="left">
-                        <a href="/product/<%= product._id %>">
-                            <b><%= product.title %></b>
+                        <a href="/product/<%= product.productId._id %>">
+                            <b><%= product.productId.title %></b>
                             <br>
-                            <sub>by <%= product.author %></sub>
+                            <sub>by <%= product.productId.author %></sub>
                         </a>
                     </td>
                     <td align="right"><%= product.quantity %></td>
-                    <td align="right">$<%= product.price %></td>
-                    <td align="right">$<%= product.price * product.quantity %></td>
+                    <td align="right">$<%= product.productId.price %></td>
+                    <td align="right">$<%= product.productId.price * product.quantity %></td>
                     <td align="center">
                         <form action="/delete-from-cart" method="post">
-                            <input type="hidden" name="id" value="<%= product._id %>">
+                            <input type="hidden" name="id" value="<%= product.productId._id %>">
                             <button class="btn" type="submit">Delete</button>
                         </form>
                     </td>
