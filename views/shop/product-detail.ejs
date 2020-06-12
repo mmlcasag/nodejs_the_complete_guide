@@ -9,7 +9,9 @@
                 <h3 class="product__author">by <%= product.author %></h3>
                 <h2 class="product__price">$<%= product.price %></h2>
                 <p class="product__description"><%= product.description %></p>
-                <%- include('../includes/add-to-cart.ejs', { product: product }) %>
+                <% if (isLoggedIn) { %>
+                    <%- include('../includes/add-to-cart.ejs', { product: product }) %>
+                <% } %>
             </td>
         </tr>
     </table>

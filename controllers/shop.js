@@ -49,9 +49,6 @@ module.exports.getProductDetails = (req, res, next) => {
 }
 
 module.exports.getCart = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect('/auth/login');
-    }
     req.session.user
         .populate('cart.items.productId')
         .execPopulate()
@@ -69,9 +66,6 @@ module.exports.getCart = (req, res, next) => {
 }
 
 module.exports.postAddToCart = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect('/auth/login');
-    }
     const id = req.body.id;
 
     Product.findById(id)
@@ -144,9 +138,6 @@ module.exports.postCreateOrder = (req, res, next) => {
 }
 
 module.exports.getOrders = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect('/auth/login');
-    }
     Order.find({ 'user._id': req.session.user._id })
         .then(orders => {
             res.render('shop/orders', {
