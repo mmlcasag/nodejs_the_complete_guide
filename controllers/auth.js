@@ -38,3 +38,17 @@ module.exports.postLogin = (req, res, next) => {
             console.log(err);
         });
 }
+
+module.exports.postLogout = (req, res, next) => {
+    // here I want to clean out my session
+    // how do I do that?
+    req.session.destroy(err => {
+        // I also want to delete the cookie
+        // how do I do that?
+        // you don't do it!
+        // the purpose of the cookie is to communicate with the session in the database
+        // since there's no session in the database anymore, the cookie is now invalid
+        // also, when you close the browser, the cookie will be deleted
+        res.redirect('/');
+    });
+}
