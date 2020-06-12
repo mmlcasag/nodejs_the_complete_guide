@@ -51,17 +51,6 @@ app.use(session({ secret: 'BARIPOAUJFGVPSF', resave: false, saveUninitialized: f
 // this is much more efficient and secure
 // always do that in your future applications!
 
-app.use((req, res, next) => {
-    User.findById('5ee23237956ed626eca64fca')
-        .then(user => {
-            req.user = user;
-            next();
-        })
-        .catch(err => {
-            console.log(err);
-        });
-});
-
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

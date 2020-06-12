@@ -49,7 +49,10 @@ module.exports.getProductDetails = (req, res, next) => {
 }
 
 module.exports.getCart = (req, res, next) => {
-    req.user
+    if (!req.session.user) {
+        return res.redirect('/auth/login');
+    }
+    req.session.user
         .populate('cart.items.productId')
         .execPopulate()
         .then(user => {
@@ -66,11 +69,14 @@ module.exports.getCart = (req, res, next) => {
 }
 
 module.exports.postAddToCart = (req, res, next) => {
+    if (!req.session.user) {
+        return res.redirect('/auth/login');
+    }
     const id = req.body.id;
 
     Product.findById(id)
         .then(product => {
-            return req.user.addToCart(product);
+            return req.session.user.addToCart(product);
         })
         .then(result => {
             res.redirect('/cart');
@@ -85,7 +91,7 @@ module.exports.postDeleteFromCart = (req, res, next) => {
     
     Product.findById(id)
         .then(product => {
-            return req.user.removeFromCart(product);
+            return req.session.user.removeFromCart(product);
         })
         .then(result => {
             res.redirect('/cart');
@@ -104,7 +110,7 @@ module.exports.getCheckout = (req, res, next) => {
 }
 
 module.exports.postCreateOrder = (req, res, next) => {
-    req.user
+    req.session.user
         .populate('cart.items.productId')
         .execPopulate()
         .then(user => {
@@ -117,9 +123,9 @@ module.exports.postCreateOrder = (req, res, next) => {
             
             const order = new Order({
                 user: {
-                    _id: req.user._id,
-                    name: req.user.name,
-                    email: req.user.email
+                    _id: req.session.user._id,
+                    name: req.session.user.name,
+                    email: req.session.user.email
                 },
                 products: products
             });
@@ -127,7 +133,7 @@ module.exports.postCreateOrder = (req, res, next) => {
             return order.save();
         })
         .then(result => {
-            return req.user.clearCart();
+            return req.session.user.clearCart();
         })
         .then(result => {
             res.redirect('/orders');
@@ -138,7 +144,10 @@ module.exports.postCreateOrder = (req, res, next) => {
 }
 
 module.exports.getOrders = (req, res, next) => {
-    Order.find({ 'user._id': req.user._id })
+    if (!req.session.user) {
+        return res.redirect('/auth/login');
+    }
+    Order.find({ 'user._id': req.session.user._id })
         .then(orders => {
             res.render('shop/orders', {
                 pageTitle: 'Orders',
