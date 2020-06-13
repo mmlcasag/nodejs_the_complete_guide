@@ -67,13 +67,50 @@ module.exports.getLogin = (req, res, next) => {
 }
 
 module.exports.postLogin = (req, res, next) => {
-    User.findById('5ee23237956ed626eca64fca')
+    const email = req.body.email;
+    const password = req.body.password;
+    
+    // now we have to search on the database for a user with same email address as provided here
+    User.findOne({ email: email })
         .then(user => {
-            req.session.user = user;
-            req.session.isLoggedIn = true;
-            req.session.save(() => {
-                res.redirect('/');
-            });
+            // the user variable holds the result of the query
+
+            // if user is defined, it means it found the user, so we can proceed with the login
+            if (user) {
+                // let's check if the password provided is correct
+                // how to do this, since our password is encrypted
+                // and we can't decrypt the stored password?
+                // now we use bcrypt again
+                bcrypt.compare(password, user.password)
+                    .then(doMatch => {
+                        // bcrypt returns a boolean saying if the passwords match
+                        
+                        // if they do match, then everything is fine, proceed with the login
+                        if (doMatch) {
+                            // store the user as an attribute in the session
+                            req.session.user = user;
+                            // store also an attribute named isLoggedIn in the session
+                            req.session.isLoggedIn = true;
+                            // store the session in the database
+                            req.session.save(() => {
+                                // when everything is done, redirect the user to the home page
+                                // now the user is logged in! \o/
+                                res.redirect('/');
+                            });
+                        // if they don't match, then try again
+                        } else {
+                            // redirect to the login form once again
+                            res.redirect('/auth/login');    
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            // if user is undefined, it means it could not find the user
+            } else {
+                // in that case, let's simply redirect to sign up
+                res.redirect('/auth/signup');
+            }
         })
         .catch(err => {
             console.log(err);
