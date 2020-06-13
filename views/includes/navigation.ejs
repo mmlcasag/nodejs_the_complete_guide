@@ -26,6 +26,7 @@
                 <% if (isLoggedIn) { %>
                     <li class="main-header__item">
                         <form action="/auth/logout" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button class="btn-inverted" type="submit">Logout</button>
                         </form>
                     </li>

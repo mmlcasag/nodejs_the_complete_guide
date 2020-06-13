@@ -8,7 +8,8 @@ module.exports.getHome = (req, res, next) => {
                 pageTitle: 'Home',
                 path: '/',
                 isLoggedIn: req.session.isLoggedIn,
-                products: products
+                products: products,
+                csrfToken: req.csrfToken() // this will generate a token and send to the view
             });
         })
         .catch(err => {

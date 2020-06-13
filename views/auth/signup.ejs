@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="/css/auth.css">
 <%- include('../includes/navigation.ejs') %>
     <form class="login-form" action="/auth/signup" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <div class="form-control">
             <label for="email">E-mail</label>
             <input type="text" name="email" id="email">
