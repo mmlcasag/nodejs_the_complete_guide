@@ -2,7 +2,7 @@ const Product = require('../models/product');
 const User = require('../models/user');
 
 module.exports.getProducts = (req, res, next) => {
-    Product.find()
+    Product.find({ userId: req.session.user._id })
         .select('_id title author image price') 
         .populate('userId', '-cart -__v')
         .then(products => {
