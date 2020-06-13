@@ -43,8 +43,7 @@ module.exports.postSignup = (req, res, next) => {
                         });
                     })
                     .then(result => {
-                        req.flash('success', 'You have signed up to our shop.');
-                        req.flash('success', 'You should now proceed to the log in page.');
+                        req.flash('success', 'Thanks for having signed up to our shop.');
                         res.redirect('/auth/login');
                     });
             }
@@ -117,28 +116,28 @@ module.exports.postResetPassword = (req, res, next) => {
             // so let's create the field in the model
             User.findOne({email: email})
                 .then(user => {
-                    if (user) {
-                        user.resetPasswordToken = token;
-                        user.resetPasswordExpiration = Date.now() + 3600000; // 1 hour in miliseconds
-                        return user.save();
-                    } else {
-                        console.log('User not found');
+                    if (!user) {
                         req.flash('error', 'Invalid user.');
                         return res.redirect('/auth/reset-password');
                     }
-                })
-                .then(result => {
-                    return nodemailer.sendMail({
-                        to: email,
-                        from: 'mmlcasag@gmail.com',
-                        subject: 'Reset Password',
-                        html: '<p>You requested a password reset</p><p>Click <a href="http://localhost:3000/reset/' + token + '">this link</a> to set a new password.</p>'
-                    });
-                })
-                .then(result => {
-                    req.flash('message', 'We have sent you a link to change your password.');
-                    req.flash('message', 'Check out your e-mail.');
-                    res.redirect('/auth/reset-password');
+                    user.resetPasswordToken = token;
+                    user.resetPasswordExpiration = Date.now() + 3600000; // 1 hour in miliseconds
+                    user.save()
+                        .then(result => {
+                            console.log('URL: http://localhost:3000/reset-password/' + token);
+                            
+                            return nodemailer.sendMail({
+                                to: email,
+                                from: 'mmlcasag@gmail.com',
+                                subject: 'Reset Password',
+                                html: '<p>You requested a password reset</p><p>Click <a href="http://localhost:3000/reset/' + token + '">this link</a> to set a new password.</p>'
+                            });
+                        })
+                        .then(result => {
+                            req.flash('message', 'We have sent you a link to change your password.');
+                            req.flash('message', 'Check out your e-mail.');
+                            return res.redirect('/auth/reset-password');
+                        });
                 })
                 .catch(err => {
                     console.log(err);
