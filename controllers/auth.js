@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 
 const User = require('../models/user');
 
-// now let's import our utils file
 const nodemailer = require('../utils/nodemailer');
 
 module.exports.getSignup = (req, res, next) => {
@@ -34,7 +33,6 @@ module.exports.postSignup = (req, res, next) => {
                         return newUser.save();
                     })
                     .then(result => {
-                        // and send an email
                         return nodemailer.sendMail({
                             to: email,
                             from: 'mmlcasag@gmail.com',
@@ -92,6 +90,17 @@ module.exports.postLogin = (req, res, next) => {
         .catch(err => {
             console.log(err);
         });
+}
+
+module.exports.getResetPassword = (req, res, next) => {
+    res.render('auth/reset', {
+        pageTitle: 'Reset Password',
+        path: '/auth/login'
+    });
+}
+
+module.exports.postResetPassword = (req, res, next) => {
+    
 }
 
 module.exports.postLogout = (req, res, next) => {

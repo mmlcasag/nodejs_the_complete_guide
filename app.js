@@ -8,15 +8,6 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 
-// SENDING EMAILS
-// we will use sendgrid as our email service provider
-// so, first thing we need to do is to sign up at www.sendgrid.com
-// then we need to install nodemailer, a third-party package responsible for sending emails
-// npm install nodemailer --save
-// then we need to install a nodemailer package that integrates nodemailer to sendgrid
-// npm install nodemailer-sendgrid-transport --save
-// now let's go to controllers/auth.js because there is were we are going to send emails
-
 const userMiddleware = require('./middlewares/user');
 const localsMiddleware = require('./middlewares/locals');
 
