@@ -69,6 +69,21 @@ app.use((req, res, next) => {
     }
 });
 
+// there are some attributes that we need to pass to every view in the application
+// for example, the isLoggedIn attribute and the csrfToken
+// but this is a bit cumbersome
+// what if there was a way to tell express that we want to add some variabled to every view?
+// turns out there is, and this is how to do it
+// we need to create a middleware
+// and add the variables we want to pass on to the views in the locals field
+app.use((req, res, next) => {
+    // locals is a special field designed the store variables that are passed to the views
+    res.locals.isLoggedIn = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    // so now we can adjust our controllers removing this attributes to the object we send to the views
+    next();
+});
+
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

@@ -7,9 +7,7 @@ module.exports.getHome = (req, res, next) => {
             res.render('shop/home', {
                 pageTitle: 'Home',
                 path: '/',
-                isLoggedIn: req.session.isLoggedIn,
-                products: products,
-                csrfToken: req.csrfToken() // this will generate a token and send to the view
+                products: products
             });
         })
         .catch(err => {
@@ -23,7 +21,6 @@ module.exports.getProducts = (req, res, next) => {
             res.render('shop/products', {
                 pageTitle: 'Products',
                 path: '/products',
-                isLoggedIn: req.session.isLoggedIn,
                 products: products
             });
         })
@@ -40,7 +37,6 @@ module.exports.getProductDetails = (req, res, next) => {
             res.render('shop/product-detail', {
                 pageTitle: product.title,
                 path: '/products',
-                isLoggedIn: req.session.isLoggedIn,
                 product: product
             });
         })
@@ -57,7 +53,6 @@ module.exports.getCart = (req, res, next) => {
             res.render('shop/cart', {
                 pageTitle: 'Cart',
                 path: '/cart',
-                isLoggedIn: req.session.isLoggedIn,
                 products: user.cart.items
             });
         })
@@ -99,8 +94,7 @@ module.exports.postDeleteFromCart = (req, res, next) => {
 module.exports.getCheckout = (req, res, next) => {
     res.render('shop/checkout', {
         pageTitle: 'Checkout',
-        path: '/checkout',
-        isLoggedIn: req.session.isLoggedIn
+        path: '/checkout'
     });
 }
 
@@ -144,7 +138,6 @@ module.exports.getOrders = (req, res, next) => {
             res.render('shop/orders', {
                 pageTitle: 'Orders',
                 path: '/orders',
-                isLoggedIn: req.session.isLoggedIn,
                 orders: orders
             });
         })
