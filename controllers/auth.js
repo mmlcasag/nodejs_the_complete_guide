@@ -167,7 +167,38 @@ module.exports.getUpdatePassword = (req, res, next) => {
 }
 
 module.exports.postUpdatePassword = (req, res, next) => {
-    
+    const token = req.body.token;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+
+    if (confirmPassword !== password) {
+        req.flash('error', 'Passwords do not match');
+        return res.redirect('/auth/update-password/' + token);
+    }
+
+    User.findOne({ resetPasswordToken: token, resetPasswordExpiration: {$gt: Date.now()} })
+        .then(user => {
+            if (!user) {
+                req.flash('error', 'Token invalid or expired');
+                return res.redirect('/auth/reset-password');
+            }
+
+            bcrypt.hash(password, 10)
+                .then(hashedPassword => {
+                    user.password = hashedPassword;
+                    user.resetPasswordExpiration = undefined;
+                    user.resetPasswordToken = undefined;
+
+                    return user.save();
+                })
+                .then(result => {
+                    req.flash('success', 'Your password has been updated');
+                    return res.redirect('/auth/login');
+                })
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }
 
 module.exports.postLogout = (req, res, next) => {
