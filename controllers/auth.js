@@ -43,7 +43,8 @@ module.exports.postSignup = (req, res, next) => {
                 // connect-flash is really simple to use
                 // first of all we need to import it and initialize it on our app.js
                 // then we can create a flash message like this:
-                req.flash('error', 'You have already signed up to our shop. You should log in instead.');
+                req.flash('error', 'You have already signed up to our shop.');
+                req.flash('error', 'You should log in instead.');
                 // now we have a flash message stored in the session
                 // and it is available until we use it
                 // so let's display it in the login page
@@ -87,7 +88,14 @@ module.exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         pageTitle: 'Login',
         path: '/auth/login',
-        errorMessage: req.flash('error') // this is how we fetch the flash message and send it to the view
+        // this is how we fetch the flash message and send it to the view
+        // req.flash returns an array
+        // so you can have as many different messages as you want
+        // and loop through them in your view
+        // you also have to test with .length() to check if there is something to be shown
+        // otherwise if test only "if (errorMessage)" it will always return true
+        // because errorMessage will not be undefined. it will be an empty array
+        errorMessages: req.flash('error')
     });
 }
 
