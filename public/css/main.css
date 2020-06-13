@@ -230,6 +230,11 @@ form {
   background-color: rgb(255,176,176);
 }
 
+.user-message__success {
+  border: 1px solid darkgreen;
+  background-color: lightgreen;
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;

@@ -43,8 +43,8 @@ module.exports.postSignup = (req, res, next) => {
                 // connect-flash is really simple to use
                 // first of all we need to import it and initialize it on our app.js
                 // then we can create a flash message like this:
-                req.flash('error', 'You have already signed up to our shop.');
-                req.flash('error', 'You should log in instead.');
+                req.flash('error', 'You are already signed up to our shop.');
+                req.flash('error', 'You should log in instead of sign up.');
                 // now we have a flash message stored in the session
                 // and it is available until we use it
                 // so let's display it in the login page
@@ -75,6 +75,8 @@ module.exports.postSignup = (req, res, next) => {
                     })
                     .then(result => {
                         // after signing up, we want to redirect the user to the login page
+                        req.flash('success', 'You have signed up to our shop.');
+                        req.flash('success', 'You should now proceed to the log in page.');
                         res.redirect('/auth/login');
                     });
             }
@@ -95,7 +97,13 @@ module.exports.getLogin = (req, res, next) => {
         // you also have to test with .length() to check if there is something to be shown
         // otherwise if test only "if (errorMessage)" it will always return true
         // because errorMessage will not be undefined. it will be an empty array
-        errorMessages: req.flash('error')
+        
+        // instead of copying and pasting this code in every controller
+        // i am moving the code to the middleware
+        // the same we did to our isLoggedIn attribute
+        // messages: req.flash('message'),
+        // errorMessages: req.flash('error'),
+        // successMessages: req.flash('success'),
     });
 }
 
@@ -132,7 +140,8 @@ module.exports.postLogin = (req, res, next) => {
                             });
                         // if they don't match, then try again
                         } else {
-                            // redirect to the login form once again
+                            // in that case, let's show a message to the user and redirect
+                            req.flash('error', 'Invalid user or password.');
                             res.redirect('/auth/login');    
                         }
                     })
@@ -141,7 +150,8 @@ module.exports.postLogin = (req, res, next) => {
                     })
             // if user is undefined, it means it could not find the user
             } else {
-                // in that case, let's simply redirect to sign up
+                // in that case, let's show a message to the user and redirect
+                req.flash('error', 'Invalid user or password.');
                 res.redirect('/auth/signup');
             }
         })

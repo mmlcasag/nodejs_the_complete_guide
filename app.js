@@ -88,6 +88,9 @@ app.use((req, res, next) => {
     // locals is a special field designed the store variables that are passed to the views
     res.locals.isLoggedIn = req.session.isLoggedIn;
     res.locals.csrfToken = req.csrfToken();
+    res.locals.messages = req.flash('message'),
+    res.locals.errorMessages = req.flash('error'),
+    res.locals.successMessages = req.flash('success'),
     // so now we can adjust our controllers removing this attributes to the object we send to the views
     next();
 });

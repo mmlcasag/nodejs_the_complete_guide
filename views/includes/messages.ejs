@@ -1,0 +1,35 @@
+<% if (typeof errorMessages !== 'undefined') { %>
+    <% if (errorMessages.length > 0) { %>
+        <div class="user-message user-message__error">
+            <ul>
+                <% errorMessages.forEach(errorMessage => { %>
+                    <li><%= errorMessage %></li>
+                <% }); %>
+            </ul>
+        </div>
+    <% } %>
+<% } %>
+
+<% if (typeof successMessages !== 'undefined') { %>
+    <% if (successMessages.length > 0) { %>
+        <div class="user-message user-message__success">
+            <ul>
+                <% successMessages.forEach(successMessage => { %>
+                    <li><%= successMessage %></li>
+                <% }); %>
+            </ul>
+        </div>
+    <% } %>
+<% } %>
+
+<% if (typeof messages !== 'undefined') { %>
+    <% if (messages.length > 0) { %>
+        <div class="user-message">
+            <ul>
+                <% messages.forEach(message => { %>
+                    <li><%= message %></li>
+                <% }); %>
+            </ul>
+        </div>
+    <% } %>
+<% } %>
