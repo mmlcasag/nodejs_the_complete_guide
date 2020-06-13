@@ -22,6 +22,32 @@ module.exports.postSignup = (req, res, next) => {
             // if it is defined, it means there's already a user by that email address
             if (user) {
                 // so let's redirect to login page
+
+                // what if we want to send a message to the login page?
+                // sending messagens via res.render() never was a problem
+                // you just pass it as an argument and that's it
+
+                // but what if i want to do that in a res.redirect()
+                // res.redirect creates a new request
+                // so how do we define a message to be sent across requests?
+
+                // we can store a message in the session
+                // but then don't want to keep it there stored
+                // we want to store it in the session
+                // and then delete it as soon as it is displayed to the user
+
+                // turns out there's a package that does just that
+                // npm install --save connect-flash
+                // we call them flash messages
+
+                // connect-flash is really simple to use
+                // first of all we need to import it and initialize it on our app.js
+                // then we can create a flash message like this:
+                req.flash('message', 'You have already signed up to our shop. You should now log in instead.');
+                // now we have a flash message stored in the session
+                // and it is available until we use it
+                // so let's display it in the login page
+                // so first let's edit our signup controller
                 return res.redirect('/auth/login');
             // if it doesn't, it means there's no user yet and so this one can proceed
             } else {
@@ -60,7 +86,8 @@ module.exports.postSignup = (req, res, next) => {
 module.exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         pageTitle: 'Login',
-        path: '/auth/login'
+        path: '/auth/login',
+        message: req.flash('message') // this is how we fetch the flash message and send it to the view
     });
 }
 

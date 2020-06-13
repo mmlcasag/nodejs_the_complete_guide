@@ -17,6 +17,10 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 // after installing it, is importing it
 const csrf = require('csurf');
 
+// flash messages
+// first thing we need to do is to import the package
+const flash = require('connect-flash');
+
 const User = require('./models/user');
 
 const authRoutes = require('./routes/auth');
@@ -44,6 +48,10 @@ app.use(session({ secret: 'BARIPOAUJFGVPSF', resave: false, saveUninitialized: f
 
 // then, after initializing the session, you can create a middleware using csrf
 app.use(csrfProtection);
+
+// then, after initializing the session, you can initialize the flash messages
+// now we can use our flash messages anywhere in our application
+app.use(flash());
 
 // right now if we restart our application
 // you will that no page with any form works anymore
