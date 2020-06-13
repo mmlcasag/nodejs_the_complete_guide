@@ -19,6 +19,19 @@ module.exports.getProducts = (req, res, next) => {
 };
 
 module.exports.getAddProduct = (req, res, next) => {
+    // let's say we want to protect our methods to make sure
+    // no user enters here unless he/she is logged
+
+    // one way to accomplish this is by doing this:
+    if (!req.session.isLoggedIn) {
+        // we already know that we set a isLoggedIn attribute to the session when the user logs in
+        // so, if this value is undefined, it means the user is not logged in
+        // so, in this case, let's redirect to the login page
+        return res.redirect('/auth/login');
+        // but doing so would require to copy and paste this code inside every method we want to protect
+        // in the next lesson we are going to see a better way to do this
+    }
+    
     const editing = req.query.editing;
     
     res.render('admin/edit-product', {
