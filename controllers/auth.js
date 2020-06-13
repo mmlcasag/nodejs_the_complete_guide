@@ -1,20 +1,9 @@
 const bcrypt = require('bcryptjs');
 
-// first let's import nodemailer
-const nodemailer = require('nodemailer');
-// then let's import the sendgrid compatibility
-const sendgridTransport = require('nodemailer-sendgrid-transport');
-
 const User = require('../models/user');
 
-// log in to your sendgrid account, generate a new api key and paste it here
-const SENDGRID_CONFIG = { auth: { api_key: 'SG.NwMwCwGXSSGpXqTtQwbT4Q.18lcskMKjrFf0s06hB4lTRBMcXT1bl8CK1EGd16tQS0' } };
-
-// now we need to initialize a transporter
-const transporter = nodemailer.createTransport(sendgridTransport(SENDGRID_CONFIG));
-// now you can send emails using this transporter
-// so now we want to send an email after signing up
-// so let's edit the postSignup method
+// now let's import our utils file
+const nodemailer = require('../utils/nodemailer');
 
 module.exports.getSignup = (req, res, next) => {
     res.render('auth/signup', {
@@ -45,9 +34,8 @@ module.exports.postSignup = (req, res, next) => {
                         return newUser.save();
                     })
                     .then(result => {
-                        // here I want to send my message
-                        // the transporter returns a promise
-                        return transporter.sendMail({
+                        // and send an email
+                        return nodemailer.sendMail({
                             to: email,
                             from: 'mmlcasag@gmail.com',
                             subject: 'Welcome to our shop!',
