@@ -26,7 +26,6 @@ app.set('views', 'views');
 
 app.use(express.static(path.join(root, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(session({ secret: 'BARIPOAUJFGVPSF', resave: false, saveUninitialized: false, store: store }));
 
 app.use((req, res, next) => {
@@ -51,17 +50,6 @@ app.use(errorRoutes);
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(result => {
-        User.findOne()
-            .then(user => {
-                if (!user) {
-                    const user = new User({
-                        name: 'Márcio Luís Casagrande',
-                        email: 'mmlcasag@gmail.com',
-                        cart: { items: [] }
-                    });
-                    user.save();
-                }
-            });        
         app.listen(3000);
     })
     .catch(err => {

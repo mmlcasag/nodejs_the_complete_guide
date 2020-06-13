@@ -9,7 +9,37 @@ module.exports.getSignup = (req, res, next) => {
 }
 
 module.exports.postSignup = (req, res, next) => {
-    
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirmPassword;
+
+    // first let's find if there's another user with that same email address
+    User.findOne({ email: email})
+        .then(user => {
+            // now let's check the argument returned by the method
+
+            // if it is defined, it means there's already a user by that email address
+            if (user) {
+                // so let's redirect to login page
+                return res.redirect('/auth/login');
+            // if it doesn't, it means there's no user yet and so this one can proceed
+            } else {
+                // so let's create it!
+                const newUser = new User({
+                    email: email,
+                    password: password,
+                    cart: { items: [] }
+                }) ;
+                return newUser.save();
+            }
+        })
+        .then(result => {
+            // after signing up, we want to redirect the user to the login page
+            res.redirect('/auth/login');
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }
 
 module.exports.getLogin = (req, res, next) => {
