@@ -15,6 +15,7 @@ const flash = require('connect-flash');
 // npm install nodemailer --save
 // then we need to install a nodemailer package that integrates nodemailer to sendgrid
 // npm install nodemailer-sendgrid-transport --save
+// now let's go to controllers/auth.js because there is were we are going to send emails
 
 const userMiddleware = require('./middlewares/user');
 const localsMiddleware = require('./middlewares/locals');
