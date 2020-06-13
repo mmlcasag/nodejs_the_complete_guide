@@ -94,7 +94,7 @@ module.exports.postLogin = (req, res, next) => {
 }
 
 module.exports.getResetPassword = (req, res, next) => {
-    res.render('auth/reset', {
+    res.render('auth/reset-password', {
         pageTitle: 'Reset Password',
         path: '/auth/login'
     });
@@ -124,18 +124,18 @@ module.exports.postResetPassword = (req, res, next) => {
                     user.resetPasswordExpiration = Date.now() + 3600000; // 1 hour in miliseconds
                     user.save()
                         .then(result => {
-                            console.log('URL: http://localhost:3000/reset-password/' + token);
+                            console.log('URL: http://localhost:3000/auth/update-password/' + token);
                             
                             return nodemailer.sendMail({
                                 to: email,
                                 from: 'mmlcasag@gmail.com',
                                 subject: 'Reset Password',
-                                html: '<p>You requested a password reset</p><p>Click <a href="http://localhost:3000/reset/' + token + '">this link</a> to set a new password.</p>'
+                                html: '<p>You requested a password reset</p><p>Click <a href="http://localhost:3000/auth/update-password/' + token + '">this link</a> to set a new password.</p>'
                             });
                         })
                         .then(result => {
-                            req.flash('message', 'We have sent you a link to change your password.');
-                            req.flash('message', 'Check out your e-mail.');
+                            req.flash('success', 'We have sent you a link to change your password.');
+                            req.flash('success', 'Check out your e-mail.');
                             return res.redirect('/auth/reset-password');
                         });
                 })
@@ -144,6 +144,30 @@ module.exports.postResetPassword = (req, res, next) => {
                 });
         }
     });
+}
+
+module.exports.getUpdatePassword = (req, res, next) => {
+    const token = req.params.token;
+    
+    User.findOne({ resetPasswordToken: token, resetPasswordExpiration: {$gt: Date.now()} })
+        .then(user =>{
+            if (!user) {
+                req.flash('error', 'Token invalid or expired');
+                return res.redirect('/auth/reset-password');
+            }
+            res.render('auth/update-password', {
+                pageTitle: 'Update Password',
+                path: '/auth/login',
+                token: token
+            });
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+module.exports.postUpdatePassword = (req, res, next) => {
+    
 }
 
 module.exports.postLogout = (req, res, next) => {
