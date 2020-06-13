@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/user');
@@ -19,7 +21,7 @@ module.exports.postSignup = (req, res, next) => {
     User.findOne({ email: email})
         .then(user => {
             if (user) {
-                req.flash('error', 'You are already signed up to our shop.');
+                req.flash('error', 'You have already signed up to our shop.');
                 req.flash('error', 'You should log in instead of sign up.');
                 return res.redirect('/auth/login');
             } else {
@@ -100,7 +102,49 @@ module.exports.getResetPassword = (req, res, next) => {
 }
 
 module.exports.postResetPassword = (req, res, next) => {
-    
+    const email = req.body.email;
+
+    // to generate a token we are going to use crypto
+    // which is a built in express package
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            req.flash('error', 'Error trying to generate a token.');
+            return res.redirect('/auth/reset-password');
+        } else {
+            const token = buffer.toString('hex');
+
+            // this token should be stored in the database
+            // so let's create the field in the model
+            User.findOne({email: email})
+                .then(user => {
+                    if (user) {
+                        user.resetPasswordToken = token;
+                        user.resetPasswordExpiration = Date.now() + 3600000; // 1 hour in miliseconds
+                        return user.save();
+                    } else {
+                        console.log('User not found');
+                        req.flash('error', 'Invalid user.');
+                        return res.redirect('/auth/reset-password');
+                    }
+                })
+                .then(result => {
+                    return nodemailer.sendMail({
+                        to: email,
+                        from: 'mmlcasag@gmail.com',
+                        subject: 'Reset Password',
+                        html: '<p>You requested a password reset</p><p>Click <a href="http://localhost:3000/reset/' + token + '">this link</a> to set a new password.</p>'
+                    });
+                })
+                .then(result => {
+                    req.flash('message', 'We have sent you a link to change your password.');
+                    req.flash('message', 'Check out your e-mail.');
+                    res.redirect('/auth/reset-password');
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    });
 }
 
 module.exports.postLogout = (req, res, next) => {

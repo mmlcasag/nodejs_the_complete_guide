@@ -29,7 +29,9 @@ const userSchema = new Schema({
                 required: true
             }
         }]
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpiration: Date
 });
 
 userSchema.methods.addToCart = function(product) {
