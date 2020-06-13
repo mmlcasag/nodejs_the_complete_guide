@@ -37,21 +37,21 @@ module.exports.postSignup = (req, res, next) => {
                 // the higher the more secure, but also takes more time
                 // also it returs a promise
                 // to let's return it to nest another then() block
-                return bcrypt.hash(password, 10);
+                return bcrypt.hash(password, 10)
+                    .then(hashedPassword => {
+                        // now let's create it!
+                        const newUser = new User({
+                            email: email,
+                            password: hashedPassword,
+                            cart: { items: [] }
+                        });
+                        return newUser.save();
+                    })
+                    .then(result => {
+                        // after signing up, we want to redirect the user to the login page
+                        res.redirect('/auth/login');
+                    });
             }
-        })
-        .then(hashedPassword => {
-            // now let's create it!
-            const newUser = new User({
-                email: email,
-                password: hashedPassword,
-                cart: { items: [] }
-            });
-            return newUser.save();
-        })
-        .then(result => {
-            // after signing up, we want to redirect the user to the login page
-            res.redirect('/auth/login');
         })
         .catch(err => {
             console.log(err);
