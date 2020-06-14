@@ -22,16 +22,16 @@ module.exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
-    const errors = validationResult(req);
+    const validationErrors = validationResult(req).array();
 
-    if (!errors.isEmpty()) {
-        console.log(errors.array());
+    if (validationErrors.length > 0) {
+        console.log(validationErrors);
         // http status 422 means there has been validation errors on the page
         // and then we render the same view as before, but now also with the errors
         return res.status(422).render('auth/signup', {
             pageTitle: 'Sign Up',
             path: '/auth/signup',
-            errors: errors.array()
+            validationErrors: validationErrors
         });
     }
 

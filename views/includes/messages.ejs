@@ -33,3 +33,15 @@
         </div>
     <% } %>
 <% } %>
+
+<% if (typeof validationErrors !== 'undefined') { %>
+    <% if (validationErrors.length > 0) { %>
+        <div class="user-message user-message__error">
+            <ul>
+                <% validationErrors.forEach(validationError => { %>
+                    <li><%= validationError.msg %></li>
+                <% }); %>
+            </ul>
+        </div>
+    <% } %>
+<% } %>

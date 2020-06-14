@@ -20,7 +20,7 @@ router.get('/signup', authController.getSignup);
 // we simply add a check for that
 // so let's say we want to validate the email field
 // and check if the value provided is really a valid email address
-router.post('/signup', check('email').isEmail(), authController.postSignup);
+router.post('/signup', check('email').isEmail().withMessage('Please enter a valid e-mail address'), authController.postSignup);
 router.get('/login', authController.getLogin);
 router.post('/login', authController.postLogin);
 router.get('/reset-password', authController.getResetPassword);
