@@ -1,6 +1,11 @@
 const crypto = require('crypto');
 
 const bcrypt = require('bcryptjs');
+// importing the other part of the express-validator
+// and since this is a big object
+// we might want to destructure it
+// we are only interested in the validationResult attribute of the validator object
+const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
 
@@ -17,6 +22,18 @@ module.exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        console.log(errors.array());
+        // http status 422 means there has been validation errors on the page
+        // and then we render the same view as before, but now also with the errors
+        return res.status(422).render('auth/signup', {
+            pageTitle: 'Sign Up',
+            path: '/auth/signup',
+            errors: errors.array()
+        });
+    }
 
     User.findOne({ email: email})
         .then(user => {
@@ -103,8 +120,6 @@ module.exports.getResetPassword = (req, res, next) => {
 module.exports.postResetPassword = (req, res, next) => {
     const email = req.body.email;
 
-    // to generate a token we are going to use crypto
-    // which is a built in express package
     crypto.randomBytes(32, (err, buffer) => {
         if (err) {
             req.flash('error', 'Error trying to generate a token.');
@@ -112,8 +127,6 @@ module.exports.postResetPassword = (req, res, next) => {
         } else {
             const token = buffer.toString('hex');
 
-            // this token should be stored in the database
-            // so let's create the field in the model
             User.findOne({email: email})
                 .then(user => {
                     if (!user) {
@@ -121,7 +134,7 @@ module.exports.postResetPassword = (req, res, next) => {
                         return res.redirect('/auth/reset-password');
                     }
                     user.resetPasswordToken = token;
-                    user.resetPasswordExpiration = Date.now() + 3600000; // 1 hour in miliseconds
+                    user.resetPasswordExpiration = Date.now() + 3600000;
                     user.save()
                         .then(result => {
                             console.log('URL: http://localhost:3000/auth/update-password/' + token);
