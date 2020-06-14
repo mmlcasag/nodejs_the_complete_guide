@@ -114,8 +114,15 @@ module.exports.postLogin = (req, res, next) => {
                             res.redirect('/');
                         });
                     } else {
-                        req.flash('error', 'Invalid password.');
-                        res.redirect('/auth/login');    
+                        return res.status(422).render('auth/login', {
+                            pageTitle: 'Login',
+                            path: '/auth/login',
+                            validationErrors: [{ value: password, msg: 'Invalid password', param: 'password', location: 'body' }],
+                            formData: {
+                                email: email,
+                                password: password
+                            }
+                        });
                     }
                 })
                 .catch(err => {
