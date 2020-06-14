@@ -80,16 +80,20 @@ module.exports.postEditProduct = (req, res, next) => {
     
     Product.findById(id)
         .then(product => {
+            if (product.userId !== req.session.user._id) {
+                req.flash('error', 'You do not have permission to edit this product');
+                return res.redirect('/');
+            }
             product.title = title;
             product.author = author;
             product.image = image;
             product.price = price;
             product.description = description;
 
-            return product.save();
-        })
-        .then(result => {
-            res.redirect('/admin/products');
+            return product.save()
+                .then(result => {
+                    res.redirect('/admin/products');
+                });
         })
         .catch(err => {
             console.log(err);
@@ -99,7 +103,7 @@ module.exports.postEditProduct = (req, res, next) => {
 module.exports.postDeleteProduct = (req, res, next) => {
     const id = req.body.id;
     
-    Product.findByIdAndRemove(id)
+    Product.deleteOne({ _id: id, userId: req.session.user._id })
         .then(result => {
             res.redirect('/admin/products');
         })
