@@ -8,7 +8,7 @@ const express = require('express');
 // and since this is a big object
 // we might want to destructure it
 // we are only interested in the check attribute of the validator object
-const { check } = require('express-validator');
+const { check, body } = require('express-validator');
 
 const authController = require('../controllers/auth');
 
@@ -38,6 +38,12 @@ router.post('/signup',
     check('password')
     .isLength({ min: 8 }).withMessage('Your password must be at least 8 characters long')
     .isAlphanumeric().withMessage('Your password should contain only numbers and text'),
+    body('confirmPassword').custom((value, { req }) => {
+        if (value !== req.body.password) {
+            throw new Error('The password confirmation does not match');
+        }
+        return true;
+    }),
     authController.postSignup
 );
 router.get('/login', authController.getLogin);
