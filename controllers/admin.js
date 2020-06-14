@@ -2,7 +2,7 @@ const Product = require('../models/product');
 const User = require('../models/user');
 
 module.exports.getProducts = (req, res, next) => {
-    Product.find({ userId: req.session.user._id })
+    Product.find(/*{ userId: req.session.user._id }*/)
         .select('_id title author image price') 
         .populate('userId', '-cart -__v')
         .then(products => {
@@ -80,9 +80,9 @@ module.exports.postEditProduct = (req, res, next) => {
     
     Product.findById(id)
         .then(product => {
-            if (product.userId !== req.session.user._id) {
+            if (product.userId.toString() !== req.session.user._id.toString()) {
                 req.flash('error', 'You do not have permission to edit this product');
-                return res.redirect('/');
+                return res.redirect('/admin/products');
             }
             product.title = title;
             product.author = author;
@@ -103,9 +103,17 @@ module.exports.postEditProduct = (req, res, next) => {
 module.exports.postDeleteProduct = (req, res, next) => {
     const id = req.body.id;
     
-    Product.deleteOne({ _id: id, userId: req.session.user._id })
-        .then(result => {
-            res.redirect('/admin/products');
+    Product.findById(id)
+        .then(product => {
+            if (product.userId.toString() !== req.session.user._id.toString()) {
+                req.flash('error', 'You do not have permission to delete this product');
+                return res.redirect('/admin/products');
+            }
+            
+            return Product.deleteOne({ _id: id, userId: req.session.user._id })
+                .then(result => {
+                    res.redirect('/admin/products');
+                });
         })
         .catch(err => {
             console.log(err);
