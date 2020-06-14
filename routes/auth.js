@@ -20,7 +20,23 @@ router.get('/signup', authController.getSignup);
 // we simply add a check for that
 // so let's say we want to validate the email field
 // and check if the value provided is really a valid email address
-router.post('/signup', check('email').isEmail().withMessage('Please enter a valid e-mail address'), authController.postSignup);
+router.post('/signup', 
+    check('email')
+    .isEmail().withMessage('Please enter a valid e-mail address')
+    // what if we want to add our custom validations?
+    .custom((value, { req }) => {
+        // let's say if the user types test@test.com
+        // my validation should consider this email invalid
+        // we can do this:
+        if (value === 'test@test.com') {
+            // we always have to throw an error on our validation
+            throw new Error('This email has been banned from our shop');
+        }
+        // and always return true otherwise
+        return true;
+    }),
+    authController.postSignup
+);
 router.get('/login', authController.getLogin);
 router.post('/login', authController.postLogin);
 router.get('/reset-password', authController.getResetPassword);
