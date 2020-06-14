@@ -14,7 +14,12 @@ const nodemailer = require('../utils/nodemailer');
 module.exports.getSignup = (req, res, next) => {
     res.render('auth/signup', {
         pageTitle: 'Sign Up',
-        path: '/auth/signup'
+        path: '/auth/signup',
+        formData: {
+            email: '',
+            password: '',
+            confirmPassword: ''
+        }
     });
 }
 
@@ -30,7 +35,12 @@ module.exports.postSignup = (req, res, next) => {
         return res.status(422).render('auth/signup', {
             pageTitle: 'Sign Up',
             path: '/auth/signup',
-            validationErrors: validationErrors
+            validationErrors: validationErrors,
+            formData: {
+                email: email,
+                password: password,
+                confirmPassword: req.body.confirmPassword
+            }
         });
     }
 
@@ -64,6 +74,10 @@ module.exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         pageTitle: 'Login',
         path: '/auth/login',
+        formData: {
+            email: '',
+            password: ''
+        }
     });
 }
 
@@ -79,7 +93,11 @@ module.exports.postLogin = (req, res, next) => {
         return res.status(422).render('auth/login', {
             pageTitle: 'Login',
             path: '/auth/login',
-            validationErrors: validationErrors
+            validationErrors: validationErrors,
+            formData: {
+                email: email,
+                password: password
+            }
         });
     }
     
