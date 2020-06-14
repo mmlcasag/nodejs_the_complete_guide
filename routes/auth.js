@@ -12,6 +12,8 @@ const { check, body } = require('express-validator');
 
 const authController = require('../controllers/auth');
 
+const User = require('../models/user');
+
 const router = express.Router();
 
 router.get('/signup', authController.getSignup);
@@ -32,8 +34,24 @@ router.post('/signup',
             // we always have to throw an error on our validation
             throw new Error('This email has been banned from our shop');
         }
+
         // and always return true otherwise
         return true;
+    })
+    .custom((value, { req }) => {
+        // we also want to check if the user already exists in the database
+        // so we can remove this validation from our controller
+        return User.findOne({ email: value })
+            .then(user => {
+                if (user) {
+                    // no more flash messages
+                    // no more return true when dealing with async functions
+                    // in this case, express waits for the return of the Promise
+                    // if it gets rejected, it means there was a validation error
+                    // if it does not, it means the validation was successful
+                    return Promise.reject('You have already signed up to our shop');
+                }
+            });
     }),
     check('password')
     .isLength({ min: 8 }).withMessage('Your password must be at least 8 characters long')

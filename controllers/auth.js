@@ -21,7 +21,6 @@ module.exports.getSignup = (req, res, next) => {
 module.exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
     const validationErrors = validationResult(req).array();
 
     if (validationErrors.length > 0) {
@@ -34,36 +33,27 @@ module.exports.postSignup = (req, res, next) => {
             validationErrors: validationErrors
         });
     }
-
-    User.findOne({ email: email})
-        .then(user => {
-            if (user) {
-                req.flash('error', 'You have already signed up to our shop.');
-                req.flash('error', 'You should log in instead of sign up.');
-                return res.redirect('/auth/login');
-            } else {
-                return bcrypt.hash(password, 10)
-                    .then(hashedPassword => {
-                        const newUser = new User({
-                            email: email,
-                            password: hashedPassword,
-                            cart: { items: [] }
-                        });
-                        return newUser.save();
-                    })
-                    .then(result => {
-                        return nodemailer.sendMail({
-                            to: email,
-                            from: 'mmlcasag@gmail.com',
-                            subject: 'Welcome to our shop!',
-                            html: '<h1>You have successfully signed up to our shop</h1>'
-                        });
-                    })
-                    .then(result => {
-                        req.flash('success', 'Thanks for having signed up to our shop.');
-                        res.redirect('/auth/login');
-                    });
-            }
+    
+    bcrypt.hash(password, 10)
+        .then(hashedPassword => {
+            const newUser = new User({
+                email: email,
+                password: hashedPassword,
+                cart: { items: [] }
+            });
+            return newUser.save();
+        })
+        .then(result => {
+            return nodemailer.sendMail({
+                to: email,
+                from: 'mmlcasag@gmail.com',
+                subject: 'Welcome to our shop!',
+                html: '<h1>You have successfully signed up to our shop</h1>'
+            });
+        })
+        .then(result => {
+            req.flash('success', 'Thanks for having signed up to our shop.');
+            res.redirect('/auth/login');
         })
         .catch(err => {
             console.log(err);
