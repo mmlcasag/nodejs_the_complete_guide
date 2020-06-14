@@ -33,7 +33,7 @@ module.exports.postSignup = (req, res, next) => {
             validationErrors: validationErrors
         });
     }
-    
+
     bcrypt.hash(password, 10)
         .then(hashedPassword => {
             const newUser = new User({
@@ -70,30 +70,37 @@ module.exports.getLogin = (req, res, next) => {
 module.exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
+    const validationErrors = validationResult(req).array();
+
+    if (validationErrors.length > 0) {
+        console.log(validationErrors);
+        // http status 422 means there has been validation errors on the page
+        // and then we render the same view as before, but now also with the errors
+        return res.status(422).render('auth/login', {
+            pageTitle: 'Login',
+            path: '/auth/login',
+            validationErrors: validationErrors
+        });
+    }
     
     User.findOne({ email: email })
         .then(user => {
-            if (user) {
-                bcrypt.compare(password, user.password)
-                    .then(doMatch => {
-                        if (doMatch) {
-                            req.session.user = user;
-                            req.session.isLoggedIn = true;
-                            req.session.save(() => {
-                                res.redirect('/');
-                            });
-                        } else {
-                            req.flash('error', 'Invalid password.');
-                            res.redirect('/auth/login');    
-                        }
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            } else {
-                req.flash('error', 'Invalid user.');
-                res.redirect('/auth/signup');
-            }
+            bcrypt.compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        req.session.user = user;
+                        req.session.isLoggedIn = true;
+                        req.session.save(() => {
+                            res.redirect('/');
+                        });
+                    } else {
+                        req.flash('error', 'Invalid password.');
+                        res.redirect('/auth/login');    
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         })
         .catch(err => {
             console.log(err);
