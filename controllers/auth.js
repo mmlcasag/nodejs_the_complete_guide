@@ -15,6 +15,7 @@ module.exports.getSignup = (req, res, next) => {
     res.render('auth/signup', {
         pageTitle: 'Sign Up',
         path: '/auth/signup',
+        validationErrors: [],
         formData: {
             email: '',
             password: '',
@@ -74,6 +75,7 @@ module.exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         pageTitle: 'Login',
         path: '/auth/login',
+        validationErrors: [],
         formData: {
             email: '',
             password: ''
