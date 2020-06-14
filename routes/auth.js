@@ -35,6 +35,9 @@ router.post('/signup',
         // and always return true otherwise
         return true;
     }),
+    check('password')
+    .isLength({ min: 8 }).withMessage('Your password must be at least 8 characters long')
+    .isAlphanumeric().withMessage('Your password should contain only numbers and text'),
     authController.postSignup
 );
 router.get('/login', authController.getLogin);
