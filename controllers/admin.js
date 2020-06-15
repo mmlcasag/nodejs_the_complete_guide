@@ -15,7 +15,7 @@ module.exports.getProducts = (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
+            res.redirect('/500');
         });
 };
 
@@ -68,7 +68,7 @@ module.exports.postAddProduct = (req, res, next) => {
             res.redirect('/admin/products');
         })
         .catch(err => {
-            console.log(err);
+            res.redirect('/500');
         });
 };
 
