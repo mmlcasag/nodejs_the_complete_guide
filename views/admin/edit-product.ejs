@@ -4,28 +4,38 @@
 <%- include('../includes/navigation.ejs') %>
     <form class="product-form" action="<%= editing ? '/admin/edit-product' : '/admin/add-product' %>" method="POST">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <% if (editing) { %>
-            <input type="hidden" name="id" value="<%= editing ? product._id : '' %>">
+        <% if (editing || hasErrors) { %>
+            <input type="hidden" name="id" value="<%= editing || hasErrors ? product._id : '' %>">
         <% } %>
         <div class="form-control">
             <label for="title">Title</label>
-            <input type="text" name="title" id="title" value="<%= editing ? product.title : '' %>">
+            <input 
+                class="<%= validationErrors.find(error => error.param === 'title') ? 'invalid' : '' %>"
+                type="text" name="title" id="title" value="<%= editing || hasErrors ? product.title : '' %>">
         </div>
         <div class="form-control">
             <label for="author">Author</label>
-            <input type="text" name="author" id="author" value="<%= editing ? product.author : '' %>">
+            <input
+                class="<%= validationErrors.find(error => error.param === 'author') ? 'invalid' : '' %>"
+                type="text" name="author" id="author" value="<%= editing || hasErrors ? product.author : '' %>">
         </div>
         <div class="form-control">
             <label for="image">Image</label>
-            <input type="text" name="image" id="image" value="<%= editing ? product.image : '' %>">
+            <input
+                class="<%= validationErrors.find(error => error.param === 'image') ? 'invalid' : '' %>"
+                type="text" name="image" id="image" value="<%= editing || hasErrors ? product.image : '' %>">
         </div>
         <div class="form-control">
             <label for="price">Price</label>
-            <input type="number" name="price" id="price" step="0.01" value="<%= editing ? product.price : '' %>">
+            <input
+                class="<%= validationErrors.find(error => error.param === 'price') ? 'invalid' : '' %>"
+                type="number" name="price" id="price" step="0.01" value="<%= editing || hasErrors ? product.price : '' %>">
         </div>
         <div class="form-control">
             <label for="description">Description</label>
-            <textarea name="description" id="description" rows="5"><%= editing ? product.description : '' %></textarea>
+            <textarea
+                class="<%= validationErrors.find(error => error.param === 'description') ? 'invalid' : '' %>"
+                name="description" id="description" rows="5"><%= editing || hasErrors ? product.description : '' %></textarea>
         </div>
         <button class="btn" type="submit"><%= editing ? 'Edit Product' : 'Add Product' %></button>
     </form>

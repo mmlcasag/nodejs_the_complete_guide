@@ -57,8 +57,7 @@ router.post('/signup',
     check('password')
         // sanitizers
         .trim() // remove excess whitespaces
-        .isLength({ min: 6 }).withMessage('Your password must be at least 6 characters long')
-        .isAlphanumeric().withMessage('Your password should contain only numbers and text'),
+        .isLength({ min: 6 }).withMessage('Your password must be at least 6 characters long'),
     check('confirmPassword')
         // sanitizers
         .trim() // remove excess whitespaces
@@ -88,8 +87,7 @@ router.post('/login',
     check('password')
         // sanitizers
         .trim() // remove excess whitespaces    
-        .isLength({ min: 6 }).withMessage('Your password must be at least 6 characters long')
-        .isAlphanumeric().withMessage('Your password should contain only numbers and text'),
+        .isLength({ min: 6 }).withMessage('Your password must be at least 6 characters long'),
     authController.postLogin
 );
 

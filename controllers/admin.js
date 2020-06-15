@@ -1,3 +1,5 @@
+const { validationResult } = require('express-validator');
+
 const Product = require('../models/product');
 const User = require('../models/user');
 
@@ -18,12 +20,12 @@ module.exports.getProducts = (req, res, next) => {
 };
 
 module.exports.getAddProduct = (req, res, next) => {
-    const editing = req.query.editing;
-
     res.render('admin/edit-product', {
         pageTitle: 'Add Product',
         path: '/admin/products',
-        editing: (editing === 'true')
+        editing: false,
+        hasErrors: false,
+        validationErrors: []
     });
 };
 
@@ -33,7 +35,25 @@ module.exports.postAddProduct = (req, res, next) => {
     const image = req.body.image;
     const price = req.body.price;
     const description = req.body.description;
-    
+    const validationErrors = validationResult(req).array();
+
+    if (validationErrors.length > 0) {
+        return res.status(422).render('admin/edit-product', {
+            pageTitle: 'Add Product',
+            path: '/admin/products',
+            editing: false,
+            hasErrors: true,
+            validationErrors: validationErrors,
+            product: {
+                title: title,
+                author: author,
+                image: image,
+                price: price,
+                description: description
+            }
+        });
+    }
+
     const product = new Product({
         title: title,
         author: author,
@@ -54,15 +74,16 @@ module.exports.postAddProduct = (req, res, next) => {
 
 module.exports.getEditProduct = (req, res, next) => {
     const id = req.params.id;
-    const editing = req.query.editing;
     
     Product.findById(id)
         .then(product => {
             res.render('admin/edit-product', {
                 pageTitle: 'Edit Product',
                 path: '/admin/products',
-                product: product,
-                editing: (editing === 'true')
+                editing: true,
+                hasErrors: false,
+                validationErrors: [],
+                product: product
             });
         })
         .catch((err) => {
@@ -77,7 +98,26 @@ module.exports.postEditProduct = (req, res, next) => {
     const image = req.body.image;
     const price = req.body.price;
     const description = req.body.description;
-    
+    const validationErrors = validationResult(req).array();
+
+    if (validationErrors.length > 0) {
+        return res.status(422).render('admin/edit-product', {
+            pageTitle: 'Edit Product',
+            path: '/admin/products',
+            editing: true,
+            hasErrors: true,
+            validationErrors: validationErrors,
+            product: {
+                _id: id,
+                title: title,
+                author: author,
+                image: image,
+                price: price,
+                description: description
+            }
+        });
+    }
+
     Product.findById(id)
         .then(product => {
             if (product.userId.toString() !== req.session.user._id.toString()) {
