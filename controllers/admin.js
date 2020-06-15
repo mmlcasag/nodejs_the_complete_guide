@@ -68,7 +68,18 @@ module.exports.postAddProduct = (req, res, next) => {
             res.redirect('/admin/products');
         })
         .catch(err => {
-            res.redirect('/500');
+            // the problem of doing that is that there's going to be a lot
+            // of duplications in our code
+            // so maybe it is better to comment this
+            // res.redirect('/500');
+            // and do this instead:
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            // when we call next() with an error passed as an argument
+            // then we let express.js know that an error occurred
+            // and it will skip all other middlewares and move right away
+            // to our special error handling middleware in the app.js
+            return next(error);
         });
 };
 
@@ -77,6 +88,7 @@ module.exports.getEditProduct = (req, res, next) => {
     
     Product.findById(id)
         .then(product => {
+            throw new Error('Dummy Error');
             res.render('admin/edit-product', {
                 pageTitle: 'Edit Product',
                 path: '/admin/products',
@@ -87,7 +99,8 @@ module.exports.getEditProduct = (req, res, next) => {
             });
         })
         .catch((err) => {
-            console.log(err);
+            // or you can simply do this
+            return next(err);
         });
 };
 

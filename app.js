@@ -45,6 +45,14 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(errorRoutes);
 
+// special error handling middleware
+// notice there are 4 arguments in the controller
+// when you call next() with an error as the argument
+// express skips all other middlewares and executes this one
+app.use((error, req, res, next) => {
+    return res.redirect('/500');
+});
+
 mongoose.connect(MONGODB_URI, MONGOOSE_CONFIG)
     .then(result => {
         app.listen(3000);
