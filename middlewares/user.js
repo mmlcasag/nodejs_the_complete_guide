@@ -15,12 +15,16 @@ module.exports = (req, res, next) => {
                 next();
             })
             .catch(err => {
-                // just logging the error is not that useful
-                // it is better to throw another error
-                // so it can be handled by some other method
-                throw new Error(err);
+                // throwing errors inside async code does not work
+                // throw new Error(err);
+                // instead, we should throw the error like this:
+                return next(err);
+                // async code is inside .then() and .catch() blocks, promises and callbacks.
             });
     } else {
+        // on the other hand, if you throw an error inside a sync part of your code
+        // it will work and it will be redirect to our special error handling middleware
+        // throw new Error(err);
         return next();
     }
 }
