@@ -15,6 +15,7 @@ module.exports.getProducts = (req, res, next) => {
             });
         })
         .catch(err => {
+            // you can simply do this
             res.redirect('/500');
         });
 };
@@ -88,7 +89,6 @@ module.exports.getEditProduct = (req, res, next) => {
     
     Product.findById(id)
         .then(product => {
-            throw new Error('Dummy Error');
             res.render('admin/edit-product', {
                 pageTitle: 'Edit Product',
                 path: '/admin/products',
@@ -149,7 +149,9 @@ module.exports.postEditProduct = (req, res, next) => {
                 });
         })
         .catch(err => {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 };
 
@@ -169,6 +171,8 @@ module.exports.postDeleteProduct = (req, res, next) => {
                 });
         })
         .catch(err => {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 };

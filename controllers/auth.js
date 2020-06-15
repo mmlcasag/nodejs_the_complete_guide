@@ -67,7 +67,9 @@ module.exports.postSignup = (req, res, next) => {
             res.redirect('/auth/login');
         })
         .catch(err => {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
 
@@ -130,7 +132,9 @@ module.exports.postLogin = (req, res, next) => {
                 })
         })
         .catch(err => {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
 
@@ -177,7 +181,9 @@ module.exports.postResetPassword = (req, res, next) => {
                         });
                 })
                 .catch(err => {
-                    console.log(err);
+                    const error = new Error(err);
+                    error.httpStatusCode = 500;
+                    return next(error);
                 });
         }
     });
@@ -199,7 +205,9 @@ module.exports.getUpdatePassword = (req, res, next) => {
             });
         })
         .catch(err => {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
 
@@ -234,14 +242,18 @@ module.exports.postUpdatePassword = (req, res, next) => {
                 })
         })
         .catch(err => {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 }
 
 module.exports.postLogout = (req, res, next) => {
     req.session.destroy(err => {
         if (err) {
-            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         }
         res.redirect('/');
     });

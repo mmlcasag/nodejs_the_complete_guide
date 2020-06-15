@@ -50,6 +50,7 @@ app.use(errorRoutes);
 // when you call next() with an error as the argument
 // express skips all other middlewares and executes this one
 app.use((error, req, res, next) => {
+    console.log(error.message);
     return res.redirect('/500');
 });
 
