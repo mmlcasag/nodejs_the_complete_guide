@@ -24,6 +24,7 @@ router.get('/signup', authController.getSignup);
 // and check if the value provided is really a valid email address
 router.post('/signup', 
     check('email')
+        .normalizeEmail() // sanitizers // lowercase the email
         .isEmail().withMessage('Please enter a valid e-mail address')
         // what if we want to add our custom validations?
         .custom((value, { req }) => {
@@ -54,15 +55,19 @@ router.post('/signup',
                 })
         }),
     check('password')
+        // sanitizers
+        .trim() // remove excess whitespaces
         .isLength({ min: 6 }).withMessage('Your password must be at least 6 characters long')
         .isAlphanumeric().withMessage('Your password should contain only numbers and text'),
     check('confirmPassword')
+        // sanitizers
+        .trim() // remove excess whitespaces
         .custom((value, { req }) => {
-        if (value !== req.body.password) {
-            throw new Error('The password confirmation does not match');
-        }
-        return true;
-    }),
+            if (value !== req.body.password) {
+                throw new Error('The password confirmation does not match');
+            }
+            return true;
+        }),
     authController.postSignup
 );
 
@@ -70,6 +75,7 @@ router.get('/login', authController.getLogin);
 
 router.post('/login', 
     check('email')
+        .normalizeEmail() // sanitizers // lowercase the email
         .isEmail().withMessage('Please enter a valid e-mail address')
         .custom((value, { req }) => {
             return User.findOne({ email: value })
@@ -80,6 +86,8 @@ router.post('/login',
                 })
         }),
     check('password')
+        // sanitizers
+        .trim() // remove excess whitespaces    
         .isLength({ min: 6 }).withMessage('Your password must be at least 6 characters long')
         .isAlphanumeric().withMessage('Your password should contain only numbers and text'),
     authController.postLogin
