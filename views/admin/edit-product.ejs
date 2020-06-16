@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="/css/forms.css">
     <link rel="stylesheet" href="/css/product.css">
 <%- include('../includes/navigation.ejs') %>
-    <form class="product-form" action="<%= editing ? '/admin/edit-product' : '/admin/add-product' %>" method="POST">
+    <form class="product-form" action="<%= editing ? '/admin/edit-product' : '/admin/add-product' %>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <% if (editing || hasErrors) { %>
             <input type="hidden" name="id" value="<%= editing || hasErrors ? product._id : '' %>">
