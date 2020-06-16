@@ -1,11 +1,12 @@
 const path = require('path');
 const fs = require('fs');
-const root = require('../utils/root');
 
 const PDFDocument = require('pdfkit');
 
 const Product = require('../models/product');
 const Order = require('../models/order');
+
+const root = require('../utils/root');
 
 module.exports.getHome = (req, res, next) => {
     Product.find()

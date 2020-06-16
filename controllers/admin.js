@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const { validationResult } = require('express-validator');
 
 const Product = require('../models/product');
@@ -153,6 +155,13 @@ module.exports.postEditProduct = (req, res, next) => {
             // we only want to set image if this is correct
             // if i don't set a new image i just don't want to update it
             if (image) {
+                // i am deleting the previous image
+                fs.unlink(product.image, (err) => {
+                    if (err) {
+                        return next(err);
+                    }
+                });
+                // because we are updating it for a newer one
                 product.image = image.path;
             }
             product.price = price;
@@ -175,11 +184,22 @@ module.exports.postDeleteProduct = (req, res, next) => {
     
     Product.findById(id)
         .then(product => {
+            if (!product) {
+                req.flash('error', 'This product does not exist anymore');
+                return res.redirect('/admin/products');
+            }
             if (product.userId.toString() !== req.session.user._id.toString()) {
                 req.flash('error', 'You do not have permission to delete this product');
                 return res.redirect('/admin/products');
             }
             
+            // i am deleting the image here
+            fs.unlink(product.image, (err) => {
+                if (err) {
+                    return next(err);
+                }
+            });
+
             return Product.deleteOne({ _id: id, userId: req.session.user._id })
                 .then(result => {
                     res.redirect('/admin/products');
