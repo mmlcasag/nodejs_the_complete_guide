@@ -15,7 +15,7 @@
             <tbody>
             <% for (let product of products) { %>
                 <tr>
-                    <td align="left" width="75px"><img src="<%= product.productId.image %>" alt="<%= product.productId.title %>" height="75px"></td>
+                    <td align="left" width="75px"><img src="/<%= product.productId.image %>" alt="<%= product.productId.title %>" height="75px"></td>
                     <td align="left">
                         <a href="/product/<%= product.productId._id %>">
                             <b><%= product.productId.title %></b>

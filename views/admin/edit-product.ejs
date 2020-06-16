@@ -19,14 +19,6 @@
                 class="<%= validationErrors.find(error => error.param === 'author') ? 'invalid' : '' %>"
                 type="text" name="author" id="author" value="<%= editing || hasErrors ? product.author : '' %>">
         </div>
-        <!--
-        <div class="form-control">
-            <label for="image">Image</label>
-            <input
-                class="<%= validationErrors.find(error => error.param === 'image') ? 'invalid' : '' %>"
-                type="text" name="image" id="image" value="<%= editing || hasErrors ? product.image : '' %>">
-        </div>
-        -->
         <div class="form-control">
             <label for="image">Image</label>
             <input

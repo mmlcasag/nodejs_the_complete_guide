@@ -22,13 +22,14 @@ const root = require('./utils/root');
 const app = express();
 
 const PUBLIC_FOLDER = path.join(root, 'public');
+const IMAGES_FOLDER = path.join(root, 'images');
 const BODYPARSER_CONFIG = { extended: false };
 
 // here we specify the multer configurations
 const MULTER_STORAGE = multer.diskStorage({
     // here we set the folder in which we want to store our files after uploading them
     destination: (req, file, callback) => {
-        callback(null, 'uploads');
+        callback(null, 'images');
     },
     // here we set the filename for files we store
     filename: (req, file, callback) => {
@@ -70,6 +71,12 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use(express.static(PUBLIC_FOLDER));
+// remember for our public css and js files that we placed them inside a public folder
+// but then when we render the files we do it without using the /public folder?
+// that's it!
+// if we want to serve the images statically and also keeping them inside the /images folder
+// we need to add this first argument
+app.use('/images', express.static(IMAGES_FOLDER));
 app.use(bodyParser.urlencoded(BODYPARSER_CONFIG));
 // remember that when we upload files we need to set a form property named enctype="multipart/form-data"?
 // so, this package named multer parses this form of enctype
