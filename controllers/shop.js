@@ -173,18 +173,38 @@ module.exports.getOrderInvoice = (req, res, next) => {
     // and how do we do that?
     // with our path and fs package!
     const filePath = path.join(root, 'data', 'invoices', file);
-    fs.readFile(filePath, (err, fileContent) => {
-        if (err) {
+    
+    Order.findById(id)
+        .then(order => {
+            if (!order) {
+                const error = new Error('Order not found');
+                error.httpStatusCode = 422;
+                return next(error);
+            }
+            if (order.user._id.toString() !== req.session.user._id.toString()) {
+                const error = new Error('You do not have permission to access this order');
+                error.httpStatusCode = 403;
+                return next(error);
+            }
+            // otherwise...
+            fs.readFile(filePath, (err, fileContent) => {
+                if (err) {
+                    const error = new Error(err);
+                    error.httpStatusCode = 500;
+                    return next(error);
+                }
+                // this just this works!
+                // but generates a random file name without file extension
+                // so, not the best user experience
+                // now we can improve things a bit by providing further information
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"')
+                return res.send(fileContent);
+            });
+        })
+        .catch(err => {
             const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
-        }
-        // this just this works!
-        // but generates a random file name without file extension
-        // so, not the best user experience
-        // now we can improve things a bit by providing further information
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"')
-        return res.send(fileContent);
-    })
+        });
 }
