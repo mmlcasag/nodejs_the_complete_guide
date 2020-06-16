@@ -179,6 +179,12 @@ module.exports.getOrderInvoice = (req, res, next) => {
             error.httpStatusCode = 500;
             return next(error);
         }
+        // this just this works!
+        // but generates a random file name without file extension
+        // so, not the best user experience
+        // now we can improve things a bit by providing further information
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"')
         return res.send(fileContent);
     })
 }
