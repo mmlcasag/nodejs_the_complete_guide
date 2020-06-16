@@ -169,66 +169,6 @@ module.exports.getOrders = (req, res, next) => {
         });
 }
 
-module.exports.getOrderInvoice = (req, res, next) => {
-    const id = req.params.id;
-    const file = 'invoice_' + id + '.pdf';
-    // now we need to retrieve this file
-    // and how do we do that?
-    // with our path and fs package!
-    const filePath = path.join(root, 'data', 'invoices', file);
-    
-    Order.findById(id)
-        .then(order => {
-            if (!order) {
-                const error = new Error('Order not found');
-                error.httpStatusCode = 422;
-                return next(error);
-            }
-            if (order.user._id.toString() !== req.session.user._id.toString()) {
-                const error = new Error('You do not have permission to access this order');
-                error.httpStatusCode = 403;
-                return next(error);
-            }
-            // otherwise...
-            
-            // this is ok for small files
-            // but if you have a large file this might cause out of memory errors
-            // instead of preloading data, it a good practice to stream data
-            /*
-            fs.readFile(filePath, (err, fileContent) => {
-                if (err) {
-                    const error = new Error(err);
-                    error.httpStatusCode = 500;
-                    return next(error);
-                }
-                // this just this works!
-                // but generates a random file name without file extension
-                // so, not the best user experience
-                // now we can improve things a bit by providing further information
-                res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"');
-                return res.send(fileContent);
-            });
-            */
-            // how to stream the data:
-            const fileStream = fs.createReadStream(filePath);
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"');
-            // this keeps on building the file to the response, little by little, in chunks
-            // the response will be streamed to the browser
-            // for large files this is a huge advantage
-            fileStream.pipe(res);
-        })
-        .catch(err => {
-            const error = new Error(err);
-            error.httpStatusCode = 500;
-            return next(error);
-        });
-}
-
-// now we will generate a pdf file on the fly
-// so I created this other method here and abandoned the method above
-// I also edited the route, to call this one
 module.exports.generateOrderInvoice = (req, res, next) => {
     const id = req.params.id;
     const file = 'invoice_' + id + '.pdf';
@@ -241,26 +181,21 @@ module.exports.generateOrderInvoice = (req, res, next) => {
                 error.httpStatusCode = 422;
                 return next(error);
             }
+
             if (order.user._id.toString() !== req.session.user._id.toString()) {
                 const error = new Error('You do not have permission to access this order');
                 error.httpStatusCode = 403;
                 return next(error);
             }
             
-            // here, instead of reading a pre-existing file
-            // we are going to generate ours
-            // and we do that using a third-party package named pdfkit
-            // npm install --save pdfkit
-            // then we import it
-            // and then we instantiate it
             const pdfDoc = new PDFDocument();
+            
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"');
-            // everything we generate in this pdfDoc will be stored as a file in our filePath
+            
             pdfDoc.pipe(fs.createWriteStream(filePath));
-            // everything we generate in this pdfDoc we will also return as this page's response
             pdfDoc.pipe(res);
-            // here we write our file
+
             pdfDoc.fontSize(26).text('Invoice', { underline: true });
             pdfDoc.fontSize(26).text('--------------------------');
             let totalPrice = 0;
@@ -270,7 +205,7 @@ module.exports.generateOrderInvoice = (req, res, next) => {
             });
             pdfDoc.fontSize(26).text('--------------------------');
             pdfDoc.fontSize(26).text('Total Price: $ ' + totalPrice);
-            // this finishes the pipes
+            
             pdfDoc.end();
         })
         .catch(err => {

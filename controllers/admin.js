@@ -41,9 +41,7 @@ module.exports.postAddProduct = (req, res, next) => {
     const description = req.body.description;
     
     const validationErrors = validationResult(req).array();
-    
-    // if image is undefined it means that whether there was a problem with the upload
-    // or multer filtered the request maybe because the file had a wrong extension...
+
     if (!image) {
         validationErrors.push({
             value: '',
@@ -63,7 +61,6 @@ module.exports.postAddProduct = (req, res, next) => {
             product: {
                 title: title,
                 author: author,
-                // image: image, we don't neded to pass the file back
                 price: price,
                 description: description
             }
@@ -73,7 +70,7 @@ module.exports.postAddProduct = (req, res, next) => {
     const product = new Product({
         title: title,
         author: author,
-        image: image.path, // remember? image is an object. we want to store just the path to the file
+        image: image.path,
         price: price,
         description: description,
         userId: req.user._id
@@ -115,7 +112,6 @@ module.exports.postEditProduct = (req, res, next) => {
     const id = req.body.id;
     const title = req.body.title;
     const author = req.body.author;
-    // we also need to adjust the edit product
     const image = req.file;
     const price = req.body.price;
     const description = req.body.description;
@@ -133,7 +129,6 @@ module.exports.postEditProduct = (req, res, next) => {
                 _id: id,
                 title: title,
                 author: author,
-                // image: image, we don't neded to pass the file back
                 price: price,
                 description: description
             }
@@ -148,20 +143,12 @@ module.exports.postEditProduct = (req, res, next) => {
             }
             product.title = title;
             product.author = author;
-            // here in the edit form we expect a different behaviour
-            // we only want to update the image if the user provides the form with a different file
-            // and only if the file is the correct format
-            // so instead of doing the same validations we did in the add product page
-            // we only want to set image if this is correct
-            // if i don't set a new image i just don't want to update it
             if (image) {
-                // i am deleting the previous image
                 fs.unlink(product.image, (err) => {
                     if (err) {
                         return next(err);
                     }
                 });
-                // because we are updating it for a newer one
                 product.image = image.path;
             }
             product.price = price;
@@ -193,7 +180,6 @@ module.exports.postDeleteProduct = (req, res, next) => {
                 return res.redirect('/admin/products');
             }
             
-            // i am deleting the image here
             fs.unlink(product.image, (err) => {
                 if (err) {
                     return next(err);
