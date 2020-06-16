@@ -15,8 +15,9 @@ module.exports.getProducts = (req, res, next) => {
             });
         })
         .catch(err => {
-            // you can simply do this
-            res.redirect('/500');
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 };
 
@@ -69,17 +70,8 @@ module.exports.postAddProduct = (req, res, next) => {
             res.redirect('/admin/products');
         })
         .catch(err => {
-            // the problem of doing that is that there's going to be a lot
-            // of duplications in our code
-            // so maybe it is better to comment this
-            // res.redirect('/500');
-            // and do this instead:
             const error = new Error(err);
             error.httpStatusCode = 500;
-            // when we call next() with an error passed as an argument
-            // then we let express.js know that an error occurred
-            // and it will skip all other middlewares and move right away
-            // to our special error handling middleware in the app.js
             return next(error);
         });
 };
@@ -99,8 +91,9 @@ module.exports.getEditProduct = (req, res, next) => {
             });
         })
         .catch((err) => {
-            // or you can simply do this
-            return next(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
 };
 

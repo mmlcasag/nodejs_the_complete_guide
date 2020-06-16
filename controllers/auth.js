@@ -1,10 +1,6 @@
 const crypto = require('crypto');
 
 const bcrypt = require('bcryptjs');
-// importing the other part of the express-validator
-// and since this is a big object
-// we might want to destructure it
-// we are only interested in the validationResult attribute of the validator object
 const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
@@ -30,9 +26,6 @@ module.exports.postSignup = (req, res, next) => {
     const validationErrors = validationResult(req).array();
 
     if (validationErrors.length > 0) {
-        console.log(validationErrors);
-        // http status 422 means there has been validation errors on the page
-        // and then we render the same view as before, but now also with the errors
         return res.status(422).render('auth/signup', {
             pageTitle: 'Sign Up',
             path: '/auth/signup',
@@ -91,9 +84,6 @@ module.exports.postLogin = (req, res, next) => {
     const validationErrors = validationResult(req).array();
 
     if (validationErrors.length > 0) {
-        console.log(validationErrors);
-        // http status 422 means there has been validation errors on the page
-        // and then we render the same view as before, but now also with the errors
         return res.status(422).render('auth/login', {
             pageTitle: 'Login',
             path: '/auth/login',
