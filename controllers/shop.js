@@ -260,7 +260,15 @@ module.exports.generateOrderInvoice = (req, res, next) => {
             // everything we generate in this pdfDoc we will also return as this page's response
             pdfDoc.pipe(res);
             // here we write our file
-            pdfDoc.text('Hello World');
+            pdfDoc.fontSize(26).text('Invoice', { underline: true });
+            pdfDoc.fontSize(26).text('--------------------------');
+            let totalPrice = 0;
+            order.products.forEach(prod => {
+                totalPrice = totalPrice + (prod.product.price * prod.quantity);
+                pdfDoc.fontSize(14).text(prod.product.title + ' - ' + prod.quantity + ' UN x $ ' + prod.product.price);
+            });
+            pdfDoc.fontSize(26).text('--------------------------');
+            pdfDoc.fontSize(26).text('Total Price: $ ' + totalPrice);
             // this finishes the pipes
             pdfDoc.end();
         })
