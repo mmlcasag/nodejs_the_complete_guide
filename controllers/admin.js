@@ -35,9 +35,9 @@ module.exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const author = req.body.author;
     const image = req.file;
-    console.log(image);
     const price = req.body.price;
     const description = req.body.description;
+    console.log(image);
     const validationErrors = validationResult(req).array();
 
     if (validationErrors.length > 0) {

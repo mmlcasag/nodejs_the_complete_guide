@@ -9,9 +9,6 @@ module.exports.postAddProductValidator = [
         .trim()
         .isString()
         .isLength({ min: 3 }).withMessage('Author must be at least 3 characters long'),
-    //body('image')
-    //    .trim()
-    //    .isURL().withMessage('Image must be a valid URL'),
     body('price')
         .isFloat().withMessage('Price must be a numeric value greater than zero'),
     body('description')
@@ -29,9 +26,6 @@ module.exports.postEditProductValidator = [
         .trim()
         .isString()
         .isLength({ min: 3 }).withMessage('Author must be at least 3 characters long'),
-    body('image')
-        .trim()
-        .isURL().withMessage('Image must be a valid URL'),
     body('price')
         .isFloat().withMessage('Price must be a numeric value greater than zero'),
     body('description')
