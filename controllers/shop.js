@@ -8,8 +8,27 @@ const Order = require('../models/order');
 
 const root = require('../utils/root');
 
+const ITEMS_PER_PAGE = 2;
+
 module.exports.getHome = (req, res, next) => {
+    // PAGINATION
+    // fetching for our query parameter "page"
+    // for example: http://localhost:3000/?page=2
+    // our local variable must hold the value "2"
+    const page = req.query.page;
+
     Product.find()
+        // Product.find() returns all the products but now 
+        // if we are on page 1 we want to retrieve the products 1 and 2
+        // if we are on page 2 we want to retrieve the products 3 and 4 and so on...
+        // so how do we do that?
+        // turns out mongodb has this skip() function
+        // this will skip the first x products
+        // with x being the previous page we are on times the items per page
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        // i don't want just to skip, i also want to limit the amout of results
+        // and we do that by using the limit() method
+        .limit(ITEMS_PER_PAGE)
         .then(products => {
             res.render('shop/home', {
                 pageTitle: 'Home',
