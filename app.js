@@ -2,6 +2,7 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
@@ -22,6 +23,8 @@ const app = express();
 
 const PUBLIC_FOLDER = path.join(root, 'public');
 const BODYPARSER_CONFIG = { extended: false };
+// here we specify the folder in which we want to store our files after uploading them
+const MULTER_CONFIG = { dest: 'images' };
 const MONGODB_URI = 'mongodb+srv://admin:admin@mmlcasag-cvtew.mongodb.net/mongoose';
 const MONGOOSE_CONFIG = { useNewUrlParser: true, useUnifiedTopology: true };
 const MONGOGBSTORE_CONFIG = { uri: MONGODB_URI, collection: 'sessions' };
@@ -35,6 +38,14 @@ app.set('views', 'views');
 
 app.use(express.static(PUBLIC_FOLDER));
 app.use(bodyParser.urlencoded(BODYPARSER_CONFIG));
+// remember that when we upload files we need to set a form property named enctype="multipart/form-data"?
+// so, this package named multer parses this form of enctype
+// just like what the bodyparser does for the default enctype x-www-form-urlencoded
+// npm install --save multer
+// after installing it, we have to import it here as a middleware
+// this middleware will check for requests with enctype="multipart/form-data" and parse them correctly
+// we have to specify if multer should look for a single file or multiple files, and the name of the attribute
+app.use(multer(MULTER_CONFIG).single('image'));
 app.use(session({...SESSION_CONFIG, store: store}));
 app.use(csrfProtection);
 app.use(flash());
