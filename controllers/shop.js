@@ -187,6 +187,11 @@ module.exports.getOrderInvoice = (req, res, next) => {
                 return next(error);
             }
             // otherwise...
+            
+            // this is ok for small files
+            // but if you have a large file this might cause out of memory errors
+            // instead of preloading data, it a good practice to stream data
+            /*
             fs.readFile(filePath, (err, fileContent) => {
                 if (err) {
                     const error = new Error(err);
@@ -198,9 +203,18 @@ module.exports.getOrderInvoice = (req, res, next) => {
                 // so, not the best user experience
                 // now we can improve things a bit by providing further information
                 res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"')
+                res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"');
                 return res.send(fileContent);
             });
+            */
+            // how to stream the data:
+            const fileStream = fs.createReadStream(filePath);
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"');
+            // this keeps on building the file to the response, little by little, in chunks
+            // the response will be streamed to the browser
+            // for large files this is a huge advantage
+            fileStream.pipe(res);
         })
         .catch(err => {
             const error = new Error(err);
