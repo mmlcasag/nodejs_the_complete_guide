@@ -11,6 +11,7 @@
                             <li class="orders__products-item">
                                 <p><%= product.product.title %></p>
                                 <p>Quantity: <%= product.quantity %> - $ <%= product.product.price %></p>
+                                <p><a href="/order/<%= order._id %>">Download Invoice</a></p>
                             </li>
                         <% }); %>
                     </ul>

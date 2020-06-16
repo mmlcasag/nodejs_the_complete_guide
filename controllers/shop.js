@@ -1,3 +1,7 @@
+const path = require('path');
+const fs = require('fs');
+const root = require('../utils/root');
+
 const Product = require('../models/product');
 const Order = require('../models/order');
 
@@ -160,4 +164,21 @@ module.exports.getOrders = (req, res, next) => {
             error.httpStatusCode = 500;
             return next(error);
         });
+}
+
+module.exports.getOrderInvoice = (req, res, next) => {
+    const id = req.params.id;
+    const file = 'invoice_' + id + '.pdf';
+    // now we need to retrieve this file
+    // and how do we do that?
+    // with our path and fs package!
+    const filePath = path.join(root, 'data', 'invoices', file);
+    fs.readFile(filePath, (err, fileContent) => {
+        if (err) {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        }
+        return res.send(fileContent);
+    })
 }
