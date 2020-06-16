@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const root = require('../utils/root');
 
+const PDFDocument = require('pdfkit');
+
 const Product = require('../models/product');
 const Order = require('../models/order');
 
@@ -221,4 +223,50 @@ module.exports.getOrderInvoice = (req, res, next) => {
             error.httpStatusCode = 500;
             return next(error);
         });
+}
+
+// now we will generate a pdf file on the fly
+// so I created this other method here and abandoned the method above
+// I also edited the route, to call this one
+module.exports.generateOrderInvoice = (req, res, next) => {
+    const id = req.params.id;
+    const file = 'invoice_' + id + '.pdf';
+    const filePath = path.join(root, 'data', 'invoices', file);
+
+    Order.findById(id)
+        .then(order => {
+            if (!order) {
+                const error = new Error('Order not found');
+                error.httpStatusCode = 422;
+                return next(error);
+            }
+            if (order.user._id.toString() !== req.session.user._id.toString()) {
+                const error = new Error('You do not have permission to access this order');
+                error.httpStatusCode = 403;
+                return next(error);
+            }
+            
+            // here, instead of reading a pre-existing file
+            // we are going to generate ours
+            // and we do that using a third-party package named pdfkit
+            // npm install --save pdfkit
+            // then we import it
+            // and then we instantiate it
+            const pdfDoc = new PDFDocument();
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename="' + file + '"');
+            // everything we generate in this pdfDoc will be stored as a file in our filePath
+            pdfDoc.pipe(fs.createWriteStream(filePath));
+            // everything we generate in this pdfDoc we will also return as this page's response
+            pdfDoc.pipe(res);
+            // here we write our file
+            pdfDoc.text('Hello World');
+            // this finishes the pipes
+            pdfDoc.end();
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });   
 }

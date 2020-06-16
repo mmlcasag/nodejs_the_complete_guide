@@ -15,6 +15,6 @@ router.post('/delete-from-cart', authMiddleware, shopController.postDeleteFromCa
 router.get('/checkout', authMiddleware, shopController.getCheckout);
 router.post('/create-order', authMiddleware, shopController.postCreateOrder);
 router.get('/orders', authMiddleware, shopController.getOrders);
-router.get('/order/:id', authMiddleware, shopController.getOrderInvoice);
+router.get('/order/:id', authMiddleware, shopController.generateOrderInvoice);
 
 module.exports = router;
