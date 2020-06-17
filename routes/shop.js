@@ -13,7 +13,8 @@ router.get('/cart', authMiddleware, shopController.getCart);
 router.post('/add-to-cart', authMiddleware, shopController.postAddToCart);
 router.post('/delete-from-cart', authMiddleware, shopController.postDeleteFromCart);
 router.get('/checkout', authMiddleware, shopController.getCheckout);
-router.post('/create-order', authMiddleware, shopController.postCreateOrder);
+router.get('/checkout/cancel', authMiddleware, shopController.getCheckout);
+router.get('/checkout/success', authMiddleware, shopController.getCheckoutSuccess);
 router.get('/orders', authMiddleware, shopController.getOrders);
 router.get('/order/:id', authMiddleware, shopController.generateOrderInvoice);
 
