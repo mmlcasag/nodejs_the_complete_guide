@@ -8,20 +8,20 @@ const Order = require('../models/order');
 
 const root = require('../utils/root');
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 1;
 
 module.exports.getHome = (req, res, next) => {
     // PAGINATION
     // fetching for our query parameter "page"
     // for example: http://localhost:3000/?page=2
     // our local variable must hold the value "2"
-    const page = req.query.page;
+    const page = +req.query.page || 1; // the "+" sign means toNumber() and the "||" means default 1
     let totalProducts = 0;
 
     // we also need to know the total count of products
     // to build our pagination correctly
     Product.find()
-        .count()
+        .countDocuments()
         .then(countProducts => {
             totalProducts = countProducts;
             // here we can chain the rest of our query
@@ -45,11 +45,12 @@ module.exports.getHome = (req, res, next) => {
                 products: products,
                 // passing all the parameters needed to work on our pagination
                 totalProducts: totalProducts,
-                hasNextPage: (page * ITEMS_PER_PAGE < totalProducts),
-                hasPrevPage: (page > 1),
+                hasNextPage: page * ITEMS_PER_PAGE < totalProducts,
+                hasPrevPage: page > 1,
                 nextPage: page + 1,
+                currPage: page,
                 prevPage: page - 1,
-                lastPage: (Math.ceil(totalProducts / ITEMS_PER_PAGE)),
+                lastPage: Math.ceil(totalProducts / ITEMS_PER_PAGE),
                 firstPage: 1
             });
         })
