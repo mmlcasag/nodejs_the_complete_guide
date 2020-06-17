@@ -197,3 +197,47 @@ module.exports.postDeleteProduct = (req, res, next) => {
             return next(error);
         });
 };
+
+module.exports.deleteProduct = (req, res, next) => {
+    const id = req.params.id;
+
+    Product.findById(id)
+        .then(product => {
+            if (!product) {
+                // you don't need to write a json file
+                // you can send it as a javascript object and express.js
+                // will convert it as json for you automatically
+                res.status(400).json({ error: true, message: 'The product you tried to access does not exist anymore' });
+            }
+            if (product.userId.toString() !== req.session.user._id.toString()) {
+                // you don't need to write a json file
+                // you can send it as a javascript object and express.js
+                // will convert it as json for you automatically
+                res.status(403).json({ error: true, message: 'You do not have permission to delete this product' });
+            }
+            
+            fs.unlink(product.image, (err) => {
+                if (err) {
+                    return next(err);
+                }
+            });
+
+            return Product.deleteOne({ _id: id, userId: req.session.user._id })
+                .then(result => {
+                    // since now we are not returning a full html page as a response
+                    // we can't redirect anymore
+                    // instead we can return a json
+                    // and work with the response in the client side
+                    // you don't need to write a json file
+                    // you can send it as a javascript object and express.js
+                    // will convert it as json for you automatically
+                    res.status(200).json({ error: false, message: 'Success' });
+                });
+        })
+        .catch(err => {        
+            // you don't need to write a json file
+            // you can send it as a javascript object and express.js
+            // will convert it as json for you automatically
+            res.status(500).json({ error: true, message: err });
+        });
+}
