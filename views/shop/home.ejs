@@ -25,21 +25,7 @@
                 </article>
             <% } %>
         </div>
-        <section class="pagination">
-            <% if (firstPage !== currPage && firstPage !== prevPage) { %>
-                <a href="/?page=<%= firstPage %>">First Page</a>
-            <% } %>
-            <% if (hasPrevPage) { %>
-                <a href="/?page=<%= prevPage %>">Prev Page</a>
-            <% } %>
-            <a class="active" href="/?page=<%= currPage %>">Curr Page</a>
-            <% if (hasNextPage) { %>
-                <a href="/?page=<%= nextPage %>">Next Page</a>
-            <% } %>
-            <% if (lastPage !== currPage && lastPage !== nextPage) { %>
-                <a href="/?page=<%= lastPage %>">Last Page</a>
-            <% } %>
-        </section>
+        <%- include('../includes/pagination.ejs', { firstPage: firstPage, prevPage: prevPage, hasPrevPage: hasPrevPage, currPage: currPage, hasNextPage: hasNextPage, nextPage: nextPage, lastPage: lastPage }) %>
     <% } else { %>
         <p>No products to display</p>
     <% } %>

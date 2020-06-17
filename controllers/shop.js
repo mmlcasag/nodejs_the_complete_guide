@@ -8,7 +8,7 @@ const Order = require('../models/order');
 
 const root = require('../utils/root');
 
-const ITEMS_PER_PAGE = 1;
+const ITEMS_PER_PAGE = 3;
 
 module.exports.getHome = (req, res, next) => {
     // PAGINATION
@@ -62,12 +62,47 @@ module.exports.getHome = (req, res, next) => {
 }
 
 module.exports.getProducts = (req, res, next) => {
+    // PAGINATION
+    // fetching for our query parameter "page"
+    // for example: http://localhost:3000/?page=2
+    // our local variable must hold the value "2"
+    const page = +req.query.page || 1; // the "+" sign means toNumber() and the "||" means default 1
+    let totalProducts = 0;
+
+    // we also need to know the total count of products
+    // to build our pagination correctly
     Product.find()
+        .countDocuments()
+        .then(countProducts => {
+            totalProducts = countProducts;
+            // here we can chain the rest of our query
+            return Product.find()
+                // Product.find() returns all the products but now 
+                // if we are on page 1 we want to retrieve the products 1 and 2
+                // if we are on page 2 we want to retrieve the products 3 and 4 and so on...
+                // so how do we do that?
+                // turns out mongodb has this skip() function
+                // this will skip the first x products
+                // with x being the previous page we are on times the items per page
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                // i don't want just to skip, i also want to limit the amout of results
+                // and we do that by using the limit() method
+                .limit(ITEMS_PER_PAGE);
+        })
         .then(products => {
             res.render('shop/products', {
                 pageTitle: 'Products',
                 path: '/products',
-                products: products
+                products: products,
+                // passing all the parameters needed to work on our pagination
+                totalProducts: totalProducts,
+                hasNextPage: page * ITEMS_PER_PAGE < totalProducts,
+                hasPrevPage: page > 1,
+                nextPage: page + 1,
+                currPage: page,
+                prevPage: page - 1,
+                lastPage: Math.ceil(totalProducts / ITEMS_PER_PAGE),
+                firstPage: 1
             });
         })
         .catch(err => {
