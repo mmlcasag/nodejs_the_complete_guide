@@ -1,3 +1,15 @@
+// setting up a ssl server
+// openssl req -nodes -new -x509 -keyout server.key -out server.cert
+// after that you'll be asked a couple of questions
+// answer them all
+// after that, you'll notice two new files on your root directory:
+// server.cert --> this is the one you share with clients
+// server.key --> this one stays always on the server
+// after that you can require https by doing:
+/*
+const https = require('https');
+*/
+
 const path = require('path');
 const fs = require('fs');
 
@@ -164,8 +176,31 @@ app.use((error, req, res, next) => {
     return res.redirect('/500');
 });
 
+
+
+
 mongoose.connect(MONGODB_URI, MONGOOSE_CONFIG)
     .then(result => {
+        // setting up a ssl server
+        // in order to start a https server
+        // you need to pass to server both files as an argument
+        // you do that by reading both files like this:
+        /*
+        const privateKey = fs.readFileSync('server.key');
+        const certificate = fs.readFileSync('server.cert');
+        */
+        // then you start the server and associates it to your app
+        /*
+        https
+            .createServer({ key: privateKey, cert: certificate }, app)
+            .listen(process.env.PORT || 3000);
+        */
+        // now your server uses ssl encryption
+        // but usually you don't need to do that
+        // hosting providers already do the heavy lifting for you
+        // so i'll comment these lines
+        // it is just for information
+                
         // environment variables
         // here we also dont want to hardcore our port number in our application
         app.listen(process.env.PORT || 3000);
