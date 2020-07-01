@@ -49,6 +49,18 @@ const flash = require('connect-flash');
 // after installing it, you need to import it
 const helmet = require('helmet');
 
+// compressing assets
+// this picks up any static data
+// js files css files and send them compressed to the browser
+// images are not compressed
+// the browser, in turn, decompressed them before executing them
+// with that less data is transferred via network
+// therefore, it makes it faster
+// npm install --save compression
+// after installing it, you need to import it
+// this is interesting if your app has many js and css files
+const compression = require('compression');
+
 const userMiddleware = require('./middlewares/user');
 const localsMiddleware = require('./middlewares/locals');
 
@@ -114,6 +126,8 @@ app.set('views', 'views');
 
 // and you also need to add it as a middleware
 app.use(helmet());
+// and you also need to add it as a middleware
+app.use(compression());
 app.use(express.static(PUBLIC_FOLDER));
 app.use('/images', express.static(IMAGES_FOLDER));
 app.use(bodyParser.urlencoded(BODYPARSER_CONFIG));
