@@ -40,6 +40,15 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 
+// setting secure response headers with HELMET
+// adds security to our application
+// basically it prevents some sorts of malicious attacks
+// just by setting up some response headers
+// go through the docs to learn more
+// npm install --save helmet
+// after installing it, you need to import it
+const helmet = require('helmet');
+
 const userMiddleware = require('./middlewares/user');
 const localsMiddleware = require('./middlewares/locals');
 
@@ -103,6 +112,8 @@ const csrfProtection = csrf();
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+// and you also need to add it as a middleware
+app.use(helmet());
 app.use(express.static(PUBLIC_FOLDER));
 app.use('/images', express.static(IMAGES_FOLDER));
 app.use(bodyParser.urlencoded(BODYPARSER_CONFIG));
