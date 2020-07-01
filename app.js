@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 // environment variables
 // npm install --save dotenv
@@ -60,6 +61,11 @@ const helmet = require('helmet');
 // after installing it, you need to import it
 // this is interesting if your app has many js and css files
 const compression = require('compression');
+
+// setting up request logging
+// npm install --save morgan
+// after installing it, you need to import it
+const morgan = require('morgan');
 
 const userMiddleware = require('./middlewares/user');
 const localsMiddleware = require('./middlewares/locals');
@@ -128,6 +134,18 @@ app.set('views', 'views');
 app.use(helmet());
 // and you also need to add it as a middleware
 app.use(compression());
+// and you also need to add it as a middleware
+// here you specify how much information should be logged
+// we will use combined as an example
+// if you want to learn more, go to the official docs
+// by default it will start logging every request to the console
+// if you want to store it in a separate file
+// you can go to their official docs to learn more of course
+// you have a lot of different ways to configure how you want to log
+// and how much you want to log.
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+app.use(morgan('combined', { stream: accessLogStream }));
+
 app.use(express.static(PUBLIC_FOLDER));
 app.use('/images', express.static(IMAGES_FOLDER));
 app.use(bodyParser.urlencoded(BODYPARSER_CONFIG));
