@@ -208,3 +208,17 @@ mongoose.connect(MONGODB_URI, MONGOOSE_CONFIG)
     .catch(err => {
         console.log(err);
     });
+
+// for deploying on heroku
+
+// 1) at package.json add this:
+// "engines": {
+//   "node": "12.16.3"
+// },
+// with the value at node being your current version
+// you can get the node version my going on the terminal and typing "node -v"
+
+// 2) create a procfile file at the root folder
+// with "web: " and the command to start your app
+// so web: node -r dotenv/config app.js dotenv_config_path=.env
+// it is the same defined at package.json on scripts / start
